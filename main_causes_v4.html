@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The M.A.I.N. Causes of WWI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f8f7f4; min-height: 100vh; }
+
+    /* ── Skip link ── */
+    .skip-link { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .skip-link:focus { left: 12px; top: 12px; width: auto; height: auto; background: #14532d; color: white; padding: 8px 14px; border-radius: 6px; z-index: 999; font-size: 0.9rem; font-weight: 600; text-decoration: none; }
+
+    /* ── Header ── */
+    .header { background: #14532d; color: white; padding: 20px 24px; }
+    .header h1 { font-size: 1.4rem; font-weight: 700; max-width: 960px; margin: 0 auto; }
+    .header p { font-size: 0.85rem; color: #bbf7d0; max-width: 960px; margin: 6px auto 0; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 20px 16px 40px; }
+
+    /* ── Instructions ── */
+    .instructions { background: #f0fdf4; border-left: 4px solid #15803d; border-radius: 0 6px 6px 0; padding: 14px 16px; margin-bottom: 20px; }
+    .instructions strong { color: #14532d; display: block; margin-bottom: 4px; font-size: 0.95rem; }
+    .instructions p { color: #14532d; font-size: 0.85rem; line-height: 1.5; }
+    .keyboard-note { margin-top: 8px; font-size: 0.8rem; color: #166534; background: #dcfce7; border-radius: 4px; padding: 6px 10px; display: inline-block; }
+
+    /* ── Steps ── */
+    .steps { display: flex; margin-bottom: 24px; border-radius: 8px; overflow: hidden; border: 1px solid #e7e5e4; }
+    .step { flex: 1; padding: 10px 14px; text-align: center; background: #f5f5f4; font-size: 0.78rem; font-weight: 600; color: #57534e; border-right: 1px solid #e7e5e4; transition: all 0.3s; }
+    .step:last-child { border-right: none; }
+    .step.active { background: #14532d; color: white; }
+    .step.done { background: #15803d; color: white; }
+    .step-num { display: block; font-size: 1rem; margin-bottom: 2px; }
+
+    /* ── Progress ── */
+    .progress-bar-wrap { background: #e7e5e4; border-radius: 99px; height: 10px; margin-bottom: 6px; }
+    .progress-bar-fill { background: #16a34a; height: 10px; border-radius: 99px; transition: width 0.4s ease; width: 0%; }
+    .progress-label { font-size: 0.78rem; color: #57534e; margin-bottom: 20px; font-weight: 600; }
+
+    /* ── Reset button ── */
+    .btn-reset { background: #e7e5e4; color: #1c1917; border: 2px solid transparent; padding: 9px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; margin-bottom: 20px; }
+    .btn-reset:hover { background: #d6d3d1; }
+    .btn-reset:focus-visible { outline: 3px solid #14532d; outline-offset: 2px; }
+
+    /* ── Pool ── */
+    .pool-label { font-size: 0.82rem; font-weight: 700; color: #44403c; margin-bottom: 8px; }
+    .card-pool {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      min-height: 72px; margin-bottom: 28px; padding: 12px;
+      background: white; border: 2px dashed #a8a29e; border-radius: 10px;
+    }
+    .card-pool.drag-active { border-color: #15803d; background: #f0fdf4; }
+    .card-pool:empty::after { content: "All cards placed!"; color: #a8a29e; font-size: 0.82rem; font-style: italic; align-self: center; }
+
+    /* ── Fact cards ── */
+    .fact-card {
+      background: white; border: 2px solid #a8a29e; border-radius: 8px;
+      padding: 10px 12px; font-size: 0.82rem; line-height: 1.45; color: #1c1917;
+      cursor: grab; max-width: 280px;
+      transition: box-shadow 0.15s, border-color 0.15s, opacity 0.15s;
+      user-select: none; position: relative;
+    }
+    .fact-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.14); border-color: #57534e; }
+    .fact-card:focus-visible {
+      outline: 3px solid #14532d; outline-offset: 2px;
+      border-color: #14532d; box-shadow: 0 0 0 4px rgba(20,83,45,0.2);
+      cursor: grab;
+    }
+    .fact-card:active { cursor: grabbing; }
+    .fact-card.dragging { opacity: 0.35; }
+    .fact-card.keyboard-selected { border-color: #14532d; background: #f0fdf4; box-shadow: 0 0 0 3px rgba(20,83,45,0.25); }
+    .drag-hint { font-size: 0.68rem; color: #78716c; margin-top: 5px; display: block; }
+
+    /* ── Buckets grid ── */
+    .buckets-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 24px; }
+    @media (max-width: 700px) { .buckets-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .bucket {
+      border-radius: 10px; border: 2px solid; padding: 12px 10px; min-height: 160px;
+      transition: filter 0.15s, box-shadow 0.15s;
+    }
+    .bucket.drag-over { filter: brightness(0.93); box-shadow: 0 0 0 3px #14532d; }
+    .bucket.keyboard-target { box-shadow: 0 0 0 3px #14532d; filter: brightness(0.95); }
+    .bucket:focus-visible { outline: 3px solid #14532d; outline-offset: 2px; }
+
+    .bucket-header { text-align: center; margin-bottom: 10px; }
+    .bucket-letter { font-size: 1.6rem; font-weight: 900; display: block; line-height: 1; }
+    .bucket-name { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-top: 2px; }
+    .bucket-count { font-size: 0.72rem; margin-top: 4px; font-weight: 600; color: #44403c; }
+    .bucket-cards { display: flex; flex-direction: column; gap: 6px; }
+
+    /* Each bucket color — all verified at WCAG AA contrast */
+    .bucket-M  { background: #eff6ff; border-color: #93c5fd; }
+    .bucket-M .bucket-letter { color: #1e3a8a; }
+    .bucket-M .bucket-name   { color: #1e3a8a; }
+
+    .bucket-A  { background: #fdf4ff; border-color: #d8b4fe; }
+    .bucket-A .bucket-letter { color: #581c87; }
+    .bucket-A .bucket-name   { color: #581c87; }
+
+    .bucket-I  { background: #fff7ed; border-color: #fdba74; }
+    .bucket-I .bucket-letter { color: #7c2d12; }
+    .bucket-I .bucket-name   { color: #7c2d12; }
+
+    .bucket-N  { background: #f0fdf4; border-color: #86efac; }
+    .bucket-N .bucket-letter { color: #14532d; }
+    .bucket-N .bucket-name   { color: #14532d; }
+
+    .bucket-As { background: #fef2f2; border-color: #fca5a5; }
+    .bucket-As .bucket-letter { color: #7f1d1d; }
+    .bucket-As .bucket-name   { color: #7f1d1d; }
+
+    /* ── Mini card inside bucket ── */
+    .bucket-card { font-size: 0.76rem; line-height: 1.4; padding: 8px; border-radius: 6px; border: 1px solid #86efac; background: #dcfce7; color: #14532d; }
+    .bucket-card-text { margin-bottom: 5px; }
+
+    /* ── Badges ── */
+    .ls-badge { display: inline-block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 99px; }
+    .ls-badge.long  { background: #dbeafe; color: #1e3a8a; }
+    .ls-badge.short { background: #fee2e2; color: #7f1d1d; }
+
+    /* ── Live region (screen readers) ── */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      color: white; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem;
+      font-weight: 600; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+      max-width: 440px; text-align: center; z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+
+    /* ── Keyboard mode banner ── */
+    .keyboard-mode-bar {
+      background: #14532d; color: white; padding: 8px 16px; font-size: 0.82rem;
+      font-weight: 600; text-align: center; display: none;
+    }
+    .keyboard-mode-bar.visible { display: block; }
+
+    /* ── TIMELINE ── */
+    .timeline-section { margin-top: 8px; }
+    .timeline-header { border-top: 4px solid #14532d; padding-top: 20px; margin-bottom: 24px; }
+    .timeline-header h2 { color: #14532d; font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
+    .timeline-header p { color: #44403c; font-size: 0.85rem; line-height: 1.5; }
+
+    .timeline { position: relative; padding: 0 0 10px; }
+    .timeline-spine {
+      position: absolute; left: 50%; top: 0; bottom: 0; width: 4px;
+      background: linear-gradient(to bottom, #1e3a8a, #581c87, #7c2d12, #14532d, #7f1d1d);
+      transform: translateX(-50%); border-radius: 2px;
+    }
+
+    .timeline-item { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 28px; position: relative; }
+    .timeline-item.right { flex-direction: row-reverse; }
+    .timeline-content { width: calc(50% - 36px); }
+    .timeline-item.right .timeline-content { text-align: right; }
+    .timeline-spacer { width: calc(50% - 36px); }
+
+    .timeline-dot {
+      width: 32px; height: 32px; border-radius: 50%; border: 3px solid white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 900; color: white; flex-shrink: 0;
+      z-index: 1; box-shadow: 0 2px 6px rgba(0,0,0,0.25); margin-top: 6px;
+    }
+    .dot-M  { background: #1e3a8a; }
+    .dot-A  { background: #581c87; }
+    .dot-I  { background: #7c2d12; }
+    .dot-N  { background: #14532d; }
+    .dot-As { background: #7f1d1d; }
+
+    .timeline-card { border-radius: 8px; padding: 12px 14px; border: 1px solid; }
+    .tc-M  { background: #eff6ff; border-color: #93c5fd; }
+    .tc-A  { background: #fdf4ff; border-color: #d8b4fe; }
+    .tc-I  { background: #fff7ed; border-color: #fdba74; }
+    .tc-N  { background: #f0fdf4; border-color: #86efac; }
+    .tc-As { background: #fef2f2; border-color: #fca5a5; }
+
+    .tc-date  { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; color: #57534e; }
+    .tc-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 5px; color: #1c1917; }
+    .tc-body  { font-size: 0.8rem; line-height: 1.55; color: #292524; }
+    .tc-badge { display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; margin-top: 8px; }
+    .badge-long  { background: #dbeafe; color: #1e3a8a; }
+    .badge-short { background: #fee2e2; color: #7f1d1d; }
+
+    .spark-row { text-align: center; margin: -8px 0 24px; position: relative; z-index: 2; }
+    .spark-label { display: inline-block; background: #7f1d1d; color: white; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 14px; border-radius: 99px; }
+
+    .complete-box { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 14px; text-align: center; margin-top: 24px; }
+    .complete-box p { color: #14532d; font-size: 0.85rem; font-weight: 700; }
+
+    .hidden { display: none; }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      .progress-bar-fill { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Skip navigation -->
+<a href="#cardPool" class="skip-link">Skip to activity</a>
+
+<!-- Screen reader live region -->
+<div id="srAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Keyboard mode banner -->
+<div class="keyboard-mode-bar" id="keyboardBar" role="status">
+  ⌨ Keyboard mode: Press <kbd>Space</kbd> or <kbd>Enter</kbd> to select a card, then press the same on a bucket to place it. Press <kbd>Escape</kbd> to cancel.
+</div>
+
+<header class="header">
+  <h1>The M.A.I.N. Causes of World War I</h1>
+  <p>Sort each fact into the correct cause category, then unlock the cause-and-effect timeline.</p>
+</header>
+
+<main class="main" id="main-content">
+
+  <div class="instructions" role="note">
+    <strong>How to use this activity</strong>
+    <p>Drag each of the 12 fact cards into the correct M.A.I.N. bucket — or Assassination. Cards turn green when correctly placed. Sort all 12 correctly to unlock the full cause-and-effect timeline.</p>
+    <span class="keyboard-note">⌨ Keyboard users: Tab to a card, press Space or Enter to select it, then Tab to a bucket and press Space or Enter to place it.</span>
+  </div>
+
+  <nav aria-label="Activity progress steps">
+    <ol class="steps" role="list">
+      <li class="step active" id="step1" aria-current="step"><span class="step-num" aria-hidden="true">①</span>Sort into M.A.I.N. Buckets</li>
+      <li class="step" id="step2"><span class="step-num" aria-hidden="true">②</span>Timeline Unlocked</li>
+    </ol>
+  </nav>
+
+  <div role="group" aria-labelledby="progressHeading">
+    <div id="progressHeading" class="sr-only">Activity progress</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="12" aria-label="Cards sorted correctly"></div>
+    </div>
+    <div class="progress-label" id="progressLabel" aria-live="polite">0 of 12 placed correctly</div>
+  </div>
+
+  <button class="btn-reset" onclick="resetAll()" aria-label="Reset activity and reshuffle cards">↺ Reset &amp; Reshuffle</button>
+
+  <div id="poolSection">
+    <div class="pool-label" id="poolLabel">Fact Cards — Drag (or use keyboard) to place each card in the correct bucket</div>
+    <div
+      class="card-pool"
+      id="cardPool"
+      role="list"
+      aria-labelledby="poolLabel"
+      ondragover="poolDragOver(event)"
+      ondrop="poolDrop(event)"
+    ></div>
+  </div>
+
+  <h2 class="sr-only">Category Buckets</h2>
+  <div class="buckets-grid" role="list" aria-label="Category buckets — drag cards here or use keyboard">
+
+    <div class="bucket bucket-M" id="bucket-M" role="listitem"
+      aria-label="Militarism bucket — 0 of 3 cards placed"
+      tabindex="0"
+      ondragover="bucketDragOver(event,'M')" ondragleave="bucketDragLeave(event,'M')" ondrop="bucketDrop(event,'M')"
+      onkeydown="bucketKeydown(event,'M')">
+      <div class="bucket-header" aria-hidden="true"><span class="bucket-letter">M</span><span class="bucket-name">Militarism</span></div>
+      <div class="bucket-count" id="count-M" aria-live="polite">0 / 3 cards</div>
+      <div class="bucket-cards" id="cards-M" role="list" aria-label="Cards placed in Militarism"></div>
+    </div>
+
+    <div class="bucket bucket-A" id="bucket-A" role="listitem"
+      aria-label="Alliances bucket — 0 of 3 cards placed"
+      tabindex="0"
+      ondragover="bucketDragOver(event,'A')" ondragleave="bucketDragLeave(event,'A')" ondrop="bucketDrop(event,'A')"
+      onkeydown="bucketKeydown(event,'A')">
+      <div class="bucket-header" aria-hidden="true"><span class="bucket-letter">A</span><span class="bucket-name">Alliances</span></div>
+      <div class="bucket-count" id="count-A" aria-live="polite">0 / 3 cards</div>
+      <div class="bucket-cards" id="cards-A" role="list" aria-label="Cards placed in Alliances"></div>
+    </div>
+
+    <div class="bucket bucket-I" id="bucket-I" role="listitem"
+      aria-label="Imperialism bucket — 0 of 2 cards placed"
+      tabindex="0"
+      ondragover="bucketDragOver(event,'I')" ondragleave="bucketDragLeave(event,'I')" ondrop="bucketDrop(event,'I')"
+      onkeydown="bucketKeydown(event,'I')">
+      <div class="bucket-header" aria-hidden="true"><span class="bucket-letter">I</span><span class="bucket-name">Imperialism</span></div>
+      <div class="bucket-count" id="count-I" aria-live="polite">0 / 2 cards</div>
+      <div class="bucket-cards" id="cards-I" role="list" aria-label="Cards placed in Imperialism"></div>
+    </div>
+
+    <div class="bucket bucket-N" id="bucket-N" role="listitem"
+      aria-label="Nationalism bucket — 0 of 2 cards placed"
+      tabindex="0"
+      ondragover="bucketDragOver(event,'N')" ondragleave="bucketDragLeave(event,'N')" ondrop="bucketDrop(event,'N')"
+      onkeydown="bucketKeydown(event,'N')">
+      <div class="bucket-header" aria-hidden="true"><span class="bucket-letter">N</span><span class="bucket-name">Nationalism</span></div>
+      <div class="bucket-count" id="count-N" aria-live="polite">0 / 2 cards</div>
+      <div class="bucket-cards" id="cards-N" role="list" aria-label="Cards placed in Nationalism"></div>
+    </div>
+
+    <div class="bucket bucket-As" id="bucket-As" role="listitem"
+      aria-label="Assassination bucket — 0 of 2 cards placed"
+      tabindex="0"
+      ondragover="bucketDragOver(event,'As')" ondragleave="bucketDragLeave(event,'As')" ondrop="bucketDrop(event,'As')"
+      onkeydown="bucketKeydown(event,'As')">
+      <div class="bucket-header" aria-hidden="true"><span class="bucket-letter">+A</span><span class="bucket-name">Assassination</span></div>
+      <div class="bucket-count" id="count-As" aria-live="polite">0 / 2 cards</div>
+      <div class="bucket-cards" id="cards-As" role="list" aria-label="Cards placed in Assassination"></div>
+    </div>
+
+  </div>
+
+  <!-- Timeline (hidden until complete) -->
+  <section id="timelineSection" class="timeline-section hidden" aria-labelledby="timelineHeading">
+    <div class="timeline-header">
+      <h2 id="timelineHeading">⏱ From Buildup to Explosion: The Cause &amp; Effect Timeline</h2>
+      <p>The M.A.I.N. causes built pressure over decades. The assassination was the short-term spark that set everything off. Notice how each long-term cause made war more likely — until the spark made it inevitable.</p>
+    </div>
+
+    <div class="timeline" role="list" aria-label="Cause and effect timeline">
+
+      <div class="timeline-spine" aria-hidden="true"></div>
+
+      <div class="timeline-item" role="listitem">
+        <div class="timeline-content">
+          <div class="timeline-card tc-M">
+            <div class="tc-date">1870s – 1914</div>
+            <div class="tc-title">Militarism</div>
+            <div class="tc-body">Germany, France, and Britain race to build the largest armies and navies in Europe. Each buildup pushes the others to respond — creating enormous military machines that leaders feel pressure to use.</div>
+            <span class="tc-badge badge-long">Long-term cause</span>
+          </div>
+        </div>
+        <div class="timeline-dot dot-M" aria-hidden="true">M</div>
+        <div class="timeline-spacer" aria-hidden="true"></div>
+      </div>
+
+      <div class="timeline-item right" role="listitem">
+        <div class="timeline-content">
+          <div class="timeline-card tc-A">
+            <div class="tc-date">1879 – 1907</div>
+            <div class="tc-title">Alliances</div>
+            <div class="tc-body">Europe divides into two armed camps: the Triple Alliance (Germany, Austria-Hungary, Italy) and the Triple Entente (Britain, France, Russia). Secret agreements mean a conflict between any two nations will pull in many others.</div>
+            <span class="tc-badge badge-long">Long-term cause</span>
+          </div>
+        </div>
+        <div class="timeline-dot dot-A" aria-hidden="true">A</div>
+        <div class="timeline-spacer" aria-hidden="true"></div>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <div class="timeline-content">
+          <div class="timeline-card tc-I">
+            <div class="tc-date">1880s – 1911</div>
+            <div class="tc-title">Imperialism</div>
+            <div class="tc-body">European powers compete for colonies in Africa and Asia. Germany challenges France and Britain in Morocco (1905, 1911), stoking rivalry and driving the Entente powers closer together against German expansion.</div>
+            <span class="tc-badge badge-long">Long-term cause</span>
+          </div>
+        </div>
+        <div class="timeline-dot dot-I" aria-hidden="true">I</div>
+        <div class="timeline-spacer" aria-hidden="true"></div>
+      </div>
+
+      <div class="timeline-item right" role="listitem">
+        <div class="timeline-content">
+          <div class="timeline-card tc-N">
+            <div class="tc-date">1871 – 1914</div>
+            <div class="tc-title">Nationalism</div>
+            <div class="tc-body">German pride surges after unification. France nurses resentment from the Franco-Prussian War. In the Balkans, Pan-Slavic nationalism pushes Serbia toward independence — and into conflict with Austria-Hungary, creating the "Balkan Powder Keg."</div>
+            <span class="tc-badge badge-long">Long-term cause</span>
+          </div>
+        </div>
+        <div class="timeline-dot dot-N" aria-hidden="true">N</div>
+        <div class="timeline-spacer" aria-hidden="true"></div>
+      </div>
+
+      <div class="spark-row" role="separator" aria-label="The short-term spark">
+        <span class="spark-label">⚡ The Spark — June 28, 1914 ⚡</span>
+      </div>
+
+      <div class="timeline-item" role="listitem">
+        <div class="timeline-content">
+          <div class="timeline-card tc-As">
+            <div class="tc-date">June – August 1914</div>
+            <div class="tc-title">Assassination → World War</div>
+            <div class="tc-body">Gavrilo Princip, a Serbian nationalist, assassinates Archduke Franz Ferdinand in Sarajevo. Austria-Hungary issues a harsh ultimatum to Serbia. Serbia refuses. Austria declares war. Russia mobilizes. Germany follows. Within six weeks, the alliance system has turned one assassination into a world war.</div>
+            <span class="tc-badge badge-short">Short-term cause — the spark</span>
+          </div>
+        </div>
+        <div class="timeline-dot dot-As" aria-hidden="true">!</div>
+        <div class="timeline-spacer" aria-hidden="true"></div>
+      </div>
+
+    </div>
+
+    <div class="complete-box" role="status">
+      <p>✓ Activity complete — continue to your practice questions.</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="assertive"></div>
+
+<script>
+  const FACTS = [
+    { id:1,  text:"Germany built up its navy to rival Britain's, making the British feel threatened for the first time in nearly a century.", category:"M", feedback:"Militarism — nations built armed forces in response to each other over decades." },
+    { id:2,  text:"After losing the Franco-Prussian War, France expanded its army to prepare for a future confrontation with Germany.", category:"M", feedback:"Militarism — France and Germany were locked in a long arms race against each other." },
+    { id:3,  text:"Otto von Bismarck built Germany's military with the goal of keeping France isolated and unable to threaten the new German state.", category:"M", feedback:"Militarism — Bismarck's strategy drove Germany's long-term military buildup." },
+    { id:4,  text:"The Triple Entente — Britain, France, and Russia — formed as a counterweight to the growing power of the Triple Alliance.", category:"A", feedback:"Alliances — rival blocs built over decades meant any conflict could quickly pull in many nations." },
+    { id:5,  text:"When Austria-Hungary declared war on Serbia, Russia mobilized immediately because of its alliance obligations.", category:"A", feedback:"Alliances — the chain of alliance obligations turned a local dispute into a world war." },
+    { id:6,  text:"Italy was part of the Triple Alliance but chose to wait before entering the war, eventually joining the Allied side instead.", category:"A", feedback:"Alliances — Italy's shifting loyalty shows how complicated and self-interested the alliance system could be." },
+    { id:7,  text:"Germany attempted to establish control over Morocco in 1905 and 1911, clashing with France and Britain who were already dominant in Africa.", category:"I", feedback:"Imperialism — competition for African colonies created long-running rivalry between the great powers." },
+    { id:8,  text:"Britain and France cooperated to block Germany from gaining a foothold in Africa, fearing that German colonial power would grow into a greater threat.", category:"I", feedback:"Imperialism — colonial competition pushed Britain and France into a closer alliance against Germany." },
+    { id:9,  text:"After the Franco-Prussian War, Germany's rapid rise as a unified nation filled Germans with intense pride in their military and national identity.", category:"N", feedback:"Nationalism — this pride built over decades and fueled an aggressive foreign policy." },
+    { id:10, text:"The growth of Pan-Slavism — the movement to unite all Slavic peoples under Russian protection — destabilized the Balkans and directly threatened Austria-Hungary.", category:"N", feedback:"Nationalism — Pan-Slavic nationalism created the unstable 'Balkan Powder Keg' over many years." },
+    { id:11, text:"Archduke Franz Ferdinand, heir to the Austro-Hungarian throne, was shot and killed in Sarajevo on June 28, 1914.", category:"As", feedback:"Assassination — this was the immediate short-term spark that set off the alliance chain reaction." },
+    { id:12, text:"Gavrilo Princip, a member of the Black Hand Serbian nationalist group, carried out the assassination to protest Austro-Hungarian rule over Slavic peoples.", category:"As", feedback:"Assassination — rooted in nationalist resentment, this act triggered a war within weeks." },
+  ];
+
+  const COUNTS = { M:3, A:3, I:2, N:2, As:2 };
+  const BUCKET_NAMES = { M:'Militarism', A:'Alliances', I:'Imperialism', N:'Nationalism', As:'Assassination' };
+
+  let correctPlaced = 0;
+  let correctPerBucket = { M:0, A:0, I:0, N:0, As:0 };
+  let dragId = null;
+  let dragFrom = null;
+  let toastTimer = null;
+  let selectedCardId = null; // keyboard mode
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length-1; i > 0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function announce(msg) {
+    const el = document.getElementById('srAnnounce');
+    el.textContent = '';
+    setTimeout(() => { el.textContent = msg; }, 50);
+  }
+
+  function init() {
+    correctPlaced = 0;
+    correctPerBucket = {M:0,A:0,I:0,N:0,As:0};
+    dragId = null; dragFrom = null; selectedCardId = null;
+    updateProgress();
+    setStep(1);
+    ['M','A','I','N','As'].forEach(k => {
+      document.getElementById('cards-'+k).innerHTML = '';
+      document.getElementById('count-'+k).textContent = '0 / '+COUNTS[k]+' cards';
+      const bucket = document.getElementById('bucket-'+k);
+      bucket.setAttribute('aria-label', BUCKET_NAMES[k]+' bucket — 0 of '+COUNTS[k]+' cards placed');
+    });
+    document.getElementById('timelineSection').classList.add('hidden');
+    const pool = document.getElementById('cardPool');
+    pool.innerHTML = '';
+    shuffle(FACTS).forEach(f => pool.appendChild(makePoolCard(f)));
+    announce('Activity reset. 12 fact cards ready to sort.');
+  }
+
+  function setStep(n) {
+    const s1 = document.getElementById('step1');
+    const s2 = document.getElementById('step2');
+    if (n === 1) {
+      s1.className = 'step active'; s1.setAttribute('aria-current','step');
+      s2.className = 'step';        s2.removeAttribute('aria-current');
+    } else {
+      s1.className = 'step done';   s1.removeAttribute('aria-current');
+      s2.className = 'step active'; s2.setAttribute('aria-current','step');
+    }
+  }
+
+  function makePoolCard(fact) {
+    const div = document.createElement('div');
+    div.className = 'fact-card';
+    div.draggable = true;
+    div.tabIndex = 0;
+    div.role = 'listitem';
+    div.dataset.id = fact.id;
+    div.setAttribute('aria-label', fact.text + '. Press Space or Enter to select this card.');
+    div.innerHTML = fact.text + '<span class="drag-hint" aria-hidden="true">Drag to a bucket, or press Space / Enter</span>';
+    div.addEventListener('dragstart', onDragStart);
+    div.addEventListener('dragend', onDragEnd);
+    div.addEventListener('keydown', cardKeydown);
+    return div;
+  }
+
+  // ── Drag handlers ──
+  function onDragStart(e) {
+    dragId = parseInt(e.currentTarget.dataset.id);
+    dragFrom = 'pool';
+    setTimeout(() => e.currentTarget.classList.add('dragging'), 0);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(dragId));
+  }
+  function onDragEnd(e) { e.currentTarget.classList.remove('dragging'); }
+  function poolDragOver(e) { e.preventDefault(); }
+  function poolDrop(e) {
+    e.preventDefault();
+    document.getElementById('cardPool').classList.remove('drag-active');
+    dragId = null; dragFrom = null;
+  }
+  function bucketDragOver(e, key) {
+    e.preventDefault(); e.stopPropagation();
+    document.getElementById('bucket-'+key).classList.add('drag-over');
+  }
+  function bucketDragLeave(e, key) {
+    document.getElementById('bucket-'+key).classList.remove('drag-over');
+  }
+  function bucketDrop(e, key) {
+    e.preventDefault(); e.stopPropagation();
+    document.getElementById('bucket-'+key).classList.remove('drag-over');
+    if (!dragId) {
+      const t = e.dataTransfer.getData('text/plain');
+      if (t) dragId = parseInt(t);
+    }
+    if (!dragId) return;
+    placeCard(dragId, key);
+    dragId = null; dragFrom = null;
+  }
+
+  // ── Keyboard handlers ──
+  function cardKeydown(e) {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      const id = parseInt(e.currentTarget.dataset.id);
+      if (selectedCardId === id) {
+        // Deselect
+        selectedCardId = null;
+        e.currentTarget.classList.remove('keyboard-selected');
+        e.currentTarget.setAttribute('aria-label', FACTS.find(f=>f.id===id).text + '. Press Space or Enter to select this card.');
+        document.querySelectorAll('.bucket').forEach(b => b.classList.remove('keyboard-target'));
+        announce('Card deselected.');
+        document.getElementById('keyboardBar').classList.remove('visible');
+      } else {
+        // Select
+        document.querySelectorAll('.fact-card').forEach(c => c.classList.remove('keyboard-selected'));
+        selectedCardId = id;
+        e.currentTarget.classList.add('keyboard-selected');
+        const fact = FACTS.find(f=>f.id===id);
+        e.currentTarget.setAttribute('aria-label', fact.text + '. Selected. Now Tab to a bucket and press Space or Enter to place it.');
+        document.querySelectorAll('.bucket').forEach(b => b.classList.add('keyboard-target'));
+        announce('Card selected: ' + fact.text + '. Tab to a bucket and press Space or Enter to place it.');
+        document.getElementById('keyboardBar').classList.add('visible');
+      }
+    }
+    if (e.key === 'Escape') {
+      cancelKeyboardSelection();
+    }
+  }
+
+  function bucketKeydown(e, key) {
+    if ((e.key === ' ' || e.key === 'Enter') && selectedCardId !== null) {
+      e.preventDefault();
+      placeCard(selectedCardId, key);
+      cancelKeyboardSelection();
+    }
+  }
+
+  function cancelKeyboardSelection() {
+    document.querySelectorAll('.fact-card').forEach(c => c.classList.remove('keyboard-selected'));
+    document.querySelectorAll('.bucket').forEach(b => b.classList.remove('keyboard-target'));
+    selectedCardId = null;
+    document.getElementById('keyboardBar').classList.remove('visible');
+  }
+
+  // ── Core placement logic ──
+  function placeCard(factId, key) {
+    const fact = FACTS.find(f => f.id === factId);
+    if (!fact) return;
+    const poolCard = document.getElementById('cardPool').querySelector('[data-id="'+factId+'"]');
+    if (!poolCard) return;
+    poolCard.remove();
+
+    const isCorrect = fact.category === key;
+
+    if (isCorrect) {
+      correctPlaced++;
+      correctPerBucket[key]++;
+      const countEl = document.getElementById('count-'+key);
+      countEl.textContent = correctPerBucket[key]+' / '+COUNTS[key]+' cards';
+      const bucket = document.getElementById('bucket-'+key);
+      bucket.setAttribute('aria-label', BUCKET_NAMES[key]+' bucket — '+correctPerBucket[key]+' of '+COUNTS[key]+' cards placed');
+      updateProgress();
+      showToast('✓ Correct! ' + fact.feedback, true);
+      announce('Correct! ' + fact.feedback);
+
+      const isAssassination = key === 'As';
+      const badgeClass = isAssassination ? 'short' : 'long';
+      const badgeText  = isAssassination ? 'Short-term cause' : 'Long-term cause';
+
+      const mini = document.createElement('div');
+      mini.className = 'bucket-card';
+      mini.setAttribute('role','listitem');
+      mini.setAttribute('aria-label', fact.text + ' — ' + badgeText);
+      mini.innerHTML = `<div class="bucket-card-text">${fact.text}</div><span class="ls-badge ${badgeClass}" aria-label="${badgeText}">${badgeText}</span>`;
+      document.getElementById('cards-'+key).appendChild(mini);
+
+      if (correctPlaced === 12) {
+        setStep(2);
+        announce('All 12 cards sorted correctly! The cause-and-effect timeline is now unlocked below.');
+        setTimeout(() => {
+          const ts = document.getElementById('timelineSection');
+          ts.classList.remove('hidden');
+          ts.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          ts.querySelector('h2').focus();
+        }, 600);
+      }
+
+    } else {
+      showToast('✗ Not quite — think about what this fact describes and try another bucket.', false);
+      announce('Incorrect. That card does not belong in ' + BUCKET_NAMES[key] + '. Try a different bucket.');
+      setTimeout(() => {
+        document.getElementById('cardPool').appendChild(makePoolCard(fact));
+      }, 800);
+    }
+  }
+
+  function updateProgress() {
+    const pct = (correctPlaced / 12) * 100;
+    const fill = document.getElementById('progressFill');
+    fill.style.width = pct + '%';
+    fill.setAttribute('aria-valuenow', correctPlaced);
+    const label = correctPlaced === 12
+      ? '✓ All 12 sorted correctly — timeline unlocked!'
+      : correctPlaced + ' of 12 placed correctly';
+    document.getElementById('progressLabel').textContent = label;
+  }
+
+  function showToast(msg, success) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = success ? '#15803d' : '#991b1b';
+    t.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  function resetAll() {
+    cancelKeyboardSelection();
+    init();
+  }
+
+  init();
+</script>
+</body>
+</html>
