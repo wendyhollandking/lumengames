@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Hoover Files — Decision Activity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:              #040c1c;
+      --bg-card:         #081628;
+      --bg-panel:        #0e2040;
+      --bg-deep:         #020810;
+      --text:            #ccc4ae;
+      --text-dim:        #58687c;
+      --text-bright:     #e8e0cc;
+      --gold:            #c8a840;
+      --gold-bright:     #e8c858;
+      --gold-dim:        #4e3e18;
+      --red:             #7a1818;
+      --blue:            #18307a;
+      --border:          #182840;
+      --border-bright:   #2a4068;
+      --h-bg:            #061810;
+      --h-border:        #1a4828;
+      --h-accent:        #40a858;
+      --h-text:          #88d090;
+      --d-bg:            #180e04;
+      --d-border:        #584010;
+      --d-accent:        #c87828;
+      --d-text:          #e0a868;
+      --a-bg:            #061020;
+      --a-border:        #182a58;
+      --a-accent:        #4878c0;
+      --a-text:          #88a8d8;
+      --correct-bg:      #061810;
+      --correct-border:  #185030;
+      --wrong-bg:        #180606;
+      --wrong-border:    #701818;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.75;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; line-height: 1.25; }
+    .container { max-width: 780px; margin: 0 auto; padding: 0 28px; }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute; left: -9999px; top: 0;
+      background: var(--gold); color: #000;
+      padding: 8px 16px; font-family: 'Oswald', sans-serif;
+      font-size: 0.9rem; z-index: 9999; text-decoration: none;
+    }
+    .skip-link:focus { left: 0; }
+
+    /* Site header */
+    .site-header {
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .site-logo {
+      font-family: 'Oswald', sans-serif; font-weight: 700;
+      font-size: 1rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase;
+    }
+    .site-logo span {
+      color: var(--text-dim); font-weight: 400; letter-spacing: 0.1em;
+      font-size: 0.72rem; display: block; margin-top: 1px;
+    }
+    .header-stamp {
+      font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.15em; color: var(--text-dim); text-transform: uppercase;
+      border: 1px solid var(--border-bright); padding: 4px 10px; flex-shrink: 0;
+    }
+
+    /* Progress HUD */
+    .hud {
+      background: var(--bg-deep);
+      border-bottom: 2px solid var(--gold-dim);
+      padding: 10px 28px;
+    }
+    .hud-inner {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; max-width: 680px; margin: 0 auto;
+    }
+    .hud-btn {
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; padding: 6px 8px;
+      font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-dim); white-space: nowrap;
+      border-radius: 2px; transition: color 0.15s;
+    }
+    .hud-btn:hover:not(:disabled) { color: var(--gold-bright); }
+    .hud-btn:focus { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .hud-btn:disabled { cursor: default; opacity: 0.35; }
+    .hud-btn.active { color: var(--gold-bright); }
+    .hud-btn.done   { color: #4a7a5a; }
+    .hud-node {
+      width: 8px; height: 8px; border: 1px solid currentColor;
+      transform: rotate(45deg); flex-shrink: 0; transition: background 0.3s;
+    }
+    .hud-btn.done   .hud-node { background: #4a7a5a; }
+    .hud-btn.active .hud-node { background: var(--gold-bright); box-shadow: 0 0 6px var(--gold); }
+    .hud-line { flex: 1; height: 1px; background: var(--border); max-width: 30px; min-width: 6px; }
+
+    /* Step pips */
+    .step-indicator { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+    .step-pip {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border-bright); flex-shrink: 0; transition: background 0.2s;
+    }
+    .step-pip.active { background: var(--gold-bright); box-shadow: 0 0 5px var(--gold); }
+    .step-pip.done   { background: #4a7a5a; }
+    .step-label {
+      font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+    }
+
+    /* Section transitions */
+    .section { opacity: 0; transform: translateY(18px); transition: opacity 0.45s ease, transform 0.45s ease; }
+    .section.revealed { opacity: 1; transform: translateY(0); }
+
+    /* Page Banner */
+    .page-banner {
+      background: var(--bg-card);
+      border-bottom: 2px solid var(--gold-dim);
+      text-align: center;
+    }
+    .banner-bunting {
+      height: 5px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--red) 0px, var(--red) 10px,
+        #8a7020 10px, #8a7020 12px,
+        var(--blue) 12px, var(--blue) 22px,
+        #8a7020 22px, #8a7020 24px
+      );
+    }
+    .banner-body { padding: 36px 0 32px; }
+    .banner-eyebrow {
+      font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.3em; color: var(--text-dim); text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .banner-ornament {
+      display: flex; align-items: center; gap: 14px;
+      max-width: 340px; margin: 0 auto 14px;
+    }
+    .banner-ornament::before,
+    .banner-ornament::after { content: ''; flex: 1; height: 1px; background: var(--gold-dim); }
+    .banner-ornament-text {
+      font-family: 'Oswald', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.35em; color: var(--gold); white-space: nowrap;
+    }
+    .banner-title {
+      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      color: var(--text-bright); margin-bottom: 14px; padding: 0 28px;
+    }
+    .banner-title-xl { font-size: clamp(2.2rem, 5.5vw, 3.6rem); font-style: italic; }
+    .banner-date {
+      font-family: 'Oswald', sans-serif; font-size: 0.82rem;
+      letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase;
+    }
+    .page-banner-intro .banner-body { padding: 52px 0 48px; }
+    .page-banner-completion .banner-body { padding: 28px 0 24px; }
+
+    /* Body */
+    .body-wrap { padding: 40px 0 52px; }
+
+    /* Scene text */
+    .scene-setter { font-size: 1rem; line-height: 1.78; margin-bottom: 32px; }
+    .scene-setter p { margin-bottom: 1em; }
+    .scene-setter p:last-child { margin-bottom: 0; }
+
+    /* Section label */
+    .section-label {
+      font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--gold-dim); }
+
+    /* Choice prompt */
+    .choice-prompt-text {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic; font-size: 1.1rem; color: var(--text-bright);
+      margin-bottom: 18px; padding-left: 16px; border-left: 3px solid var(--gold-dim);
+    }
+
+    /* Choice buttons */
+    .choices { display: flex; flex-direction: column; border: 1px solid var(--border); }
+    .choice-btn {
+      background: var(--bg-card); border: none; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; padding: 0;
+      cursor: pointer; width: 100%; text-align: left; transition: background 0.15s;
+      position: relative;
+    }
+    .choice-btn:last-child { border-bottom: none; }
+    .choice-btn::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: transparent; transition: background 0.15s;
+    }
+    .choice-btn:hover:not(:disabled) { background: #0e1e38; }
+    .choice-btn:hover:not(:disabled)::before { background: var(--gold); }
+    .choice-btn:focus { outline: none; box-shadow: inset 0 0 0 2px var(--gold); z-index: 1; }
+    .choice-btn:disabled { cursor: default; }
+    .choice-btn.picked     { background: #102040; }
+    .choice-btn.picked::before { background: var(--gold-bright); }
+    .choice-btn.is-hoover  { background: var(--correct-bg); }
+    .choice-btn.is-hoover::before { background: #40a858; }
+    .choice-btn.not-hoover { background: var(--wrong-bg); }
+    .choice-btn.not-hoover::before { background: #7a2828; }
+    .choice-key {
+      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1rem;
+      color: var(--gold); flex-shrink: 0; width: 52px;
+      border-right: 1px solid var(--border);
+      background: rgba(0,0,0,0.2); letter-spacing: 0.05em;
+      display: flex; align-items: flex-start; padding: 19px 0 18px 20px;
+    }
+    .choice-btn.picked     .choice-key { color: var(--gold-bright); }
+    .choice-btn.is-hoover  .choice-key { color: #40a858; }
+    .choice-btn.not-hoover .choice-key { color: #a06060; }
+    .choice-text {
+      font-family: 'Source Serif 4', Georgia, serif; font-size: 0.97rem;
+      line-height: 1.6; color: var(--text); padding: 18px 20px; flex: 1;
+    }
+
+    /* Feedback panel */
+    .feedback-panel { border-left: 4px solid; padding: 24px 28px; margin: 20px 0; }
+    .fb-match { background: var(--h-bg); border-color: var(--h-border); }
+    .fb-diff  { background: var(--d-bg); border-color: var(--d-border); }
+    .fb-verdict {
+      font-family: 'Oswald', sans-serif; font-size: 0.72rem;
+      letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .fb-verdict::after { content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.3; }
+    .fb-match .fb-verdict { color: var(--h-accent); }
+    .fb-diff  .fb-verdict { color: var(--d-accent); }
+    .fb-match p { color: var(--h-text); font-size: 0.96rem; line-height: 1.72; margin-bottom: 0.85em; }
+    .fb-diff  p { color: var(--d-text); font-size: 0.96rem; line-height: 1.72; margin-bottom: 0.85em; }
+    .feedback-panel p:last-child { margin-bottom: 0; }
+
+    /* History box */
+    .history-box {
+      background: var(--a-bg); border: 1px solid var(--a-border);
+      border-left: 4px solid var(--a-accent); padding: 22px 26px; margin-bottom: 24px;
+    }
+    .history-box p { color: var(--a-text); font-size: 0.95rem; margin-bottom: 1em; line-height: 1.75; }
+    .history-box p:last-child { margin-bottom: 0; }
+
+    /* Callout */
+    .callout {
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-top: 2px solid var(--gold-dim); padding: 22px 26px; margin: 24px 0;
+    }
+    .callout h3 { font-size: 0.95rem; color: var(--gold-bright); margin-bottom: 12px; }
+    .callout p  { font-size: 0.92rem; color: var(--text); margin-bottom: 0.9em; line-height: 1.72; }
+    .callout p:last-child { margin-bottom: 0; }
+
+    /* Eval */
+    .eval-wrap { margin-top: 32px; }
+    .eval-prompt {
+      font-style: italic; color: var(--text); font-size: 0.97rem;
+      margin-bottom: 16px; padding-left: 14px; border-left: 2px solid var(--gold-dim); line-height: 1.65;
+    }
+    .eval-choices { display: flex; flex-direction: column; border: 1px solid var(--border); }
+    .eval-btn {
+      background: var(--bg-card); border: none; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; padding: 0;
+      cursor: pointer; width: 100%; text-align: left; transition: background 0.15s; position: relative;
+    }
+    .eval-btn:last-of-type { border-bottom: none; }
+    .eval-btn::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: transparent; transition: background 0.15s;
+    }
+    .eval-btn:hover { background: #0e1e38; }
+    .eval-btn:hover::before { background: var(--gold-dim); }
+    .eval-btn:focus { outline: none; box-shadow: inset 0 0 0 2px var(--gold); z-index: 1; }
+    .eval-btn.correct   { background: var(--correct-bg); }
+    .eval-btn.correct::before   { background: #40a858; }
+    .eval-btn.incorrect { background: var(--wrong-bg); }
+    .eval-btn.incorrect::before { background: #c04040; }
+    .eval-btn.correct:hover   { background: #081e10; }
+    .eval-btn.incorrect:hover { background: #200808; }
+    .eval-key {
+      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 0.9rem;
+      color: var(--text-dim); flex-shrink: 0; width: 46px;
+      padding: 14px 0 14px 16px; border-right: 1px solid var(--border);
+      background: rgba(0,0,0,0.2); display: flex; align-items: flex-start;
+    }
+    .eval-btn.correct   .eval-key { color: #40a858; }
+    .eval-btn.incorrect .eval-key { color: #c04040; }
+    .eval-text {
+      font-family: 'Source Serif 4', Georgia, serif; font-size: 0.92rem;
+      line-height: 1.6; color: var(--text); padding: 14px 18px; flex: 1;
+    }
+    .eval-feedback {
+      display: none; padding: 12px 18px 12px 60px; background: #040c1c;
+      border-top: 1px solid var(--border); font-size: 0.87rem;
+      line-height: 1.65; color: var(--text-dim); font-style: italic;
+    }
+    .eval-feedback.shown { display: block; }
+    .eval-note {
+      font-family: 'Oswald', sans-serif; font-size: 0.63rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-dim); margin-top: 8px; text-align: center;
+    }
+
+    /* Nav buttons */
+    .step-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border);
+    }
+    .step-nav.nav-right { justify-content: flex-end; }
+    .nav-btn {
+      font-family: 'Oswald', sans-serif; font-size: 0.78rem; letter-spacing: 0.18em;
+      text-transform: uppercase; border: 1px solid var(--border-bright);
+      background: transparent; cursor: pointer;
+      padding: 12px 22px; transition: background 0.18s, border-color 0.18s, color 0.18s;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .nav-btn.nav-back  { color: var(--text-dim); }
+    .nav-btn.nav-back:hover  { background: #0e1828; border-color: var(--text-dim); color: var(--text); }
+    .nav-btn.nav-fwd   { color: var(--gold); border-color: var(--gold-dim); }
+    .nav-btn.nav-fwd:hover   { background: var(--gold-dim); border-color: var(--gold); color: var(--text-bright); box-shadow: 0 0 14px rgba(200,168,64,0.2); }
+    .nav-btn:focus { outline: none; box-shadow: 0 0 0 2px var(--gold); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+    .nav-btn .arrow { font-size: 0.62rem; }
+
+    /* Synthesis */
+    .synth-title { font-size: clamp(1.5rem, 3.5vw, 2.2rem); color: var(--text-bright); margin-bottom: 18px; }
+    .synth-prompt { font-size: 0.97rem; margin-bottom: 1em; line-height: 1.75; }
+
+    /* Completion */
+    .completion-text p { font-size: 1rem; margin-bottom: 1.1em; line-height: 1.78; }
+
+    /* Dossier */
+    .dossier { margin-top: 36px; border: 1px solid var(--border); }
+    .dossier-btn {
+      width: 100%; background: var(--bg-panel); border: none;
+      padding: 16px 22px; display: flex; justify-content: space-between;
+      align-items: center; cursor: pointer; transition: background 0.15s;
+    }
+    .dossier-btn:hover { background: #122038; }
+    .dossier-btn:focus { outline: none; box-shadow: inset 0 0 0 2px var(--gold-dim); }
+    .dossier-label {
+      font-family: 'Oswald', sans-serif; font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dossier-label::before { content: '◆'; font-size: 0.5rem; }
+    .dossier-arrow { font-size: 0.6rem; color: var(--gold-dim); transition: transform 0.3s; }
+    .dossier-btn[aria-expanded="true"] .dossier-arrow { transform: rotate(180deg); }
+    .dossier-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .dossier-body.open { max-height: 2400px; }
+    .dossier-inner { padding: 22px; }
+    .dossier-item { padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+    .dossier-item:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: none; }
+    .dossier-item h4 {
+      font-family: 'Oswald', sans-serif; font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+    }
+    .dossier-line { font-size: 0.87rem; color: var(--text-dim); margin-bottom: 4px; line-height: 1.55; }
+    .dossier-tag {
+      display: inline-block; font-family: 'Oswald', sans-serif; font-size: 0.62rem;
+      letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 10px;
+      border: 1px solid; margin-top: 8px;
+    }
+    .dossier-tag.match { color: var(--h-accent); border-color: var(--h-border); background: var(--h-bg); }
+    .dossier-tag.diff  { color: var(--d-accent); border-color: var(--d-border); background: var(--d-bg); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    @media (max-width: 600px) {
+      body { font-size: 16px; }
+      .container { padding: 0 16px; }
+      .hud-btn span { display: none; } .hud-btn { padding: 6px 4px; } .hud-line { max-width: 10px; }
+      .feedback-panel, .history-box, .callout { padding: 16px 18px; }
+      .step-nav { flex-direction: column; align-items: stretch; }
+      .nav-btn { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header role="banner">
+  <div class="site-header">
+    <div class="site-logo">
+      The Hoover Files
+      <span>U.S. History II — Decision Activity</span>
+    </div>
+    <div class="header-stamp" aria-hidden="true">1929–1933</div>
+  </div>
+  <nav class="hud" aria-label="Activity progress">
+    <div class="hud-inner" id="hudSteps" role="list"></div>
+  </nav>
+</header>
+
+<main id="main"></main>
+
+<script>
+// ── Data ─────────────────────────────────────────────────
+const SCENARIOS = [
+  {
+    id: 1, num: '01 / 03',
+    title: 'The Unemployment Crisis',
+    date: '1930',
+    scene: [
+      'Unemployment has hit 9% and is still climbing. Breadlines are overwhelming local charities. City governments in Chicago and New York are nearly bankrupt from relief spending.',
+      'Congress is pushing for a federal relief program — direct dollars to the states to support the unemployed.'
+    ],
+    choicePrompt: 'What is your response?',
+    choices: [
+      {
+        id: 'A', text: 'Launch a federal relief program: send direct funds to states to support the unemployed.',
+        feedback: [
+          'Hoover chose differently — so we can\'t know exactly what this path would have looked like. But we have a good historical parallel.',
+          'FDR launched exactly this kind of program in 1933. The Federal Emergency Relief Administration sent direct grants to states, distributing hundreds of millions of dollars to the unemployed within months. It helped millions of people and is broadly credited with reducing immediate suffering.',
+          'The tradeoff: it permanently expanded the federal government\'s role in welfare — which is precisely what Hoover feared. Whether that tradeoff was worth it is still debated by historians.'
+        ]
+      },
+      {
+        id: 'B', text: 'Urge businesses to voluntarily maintain wages. Encourage charities and local governments to expand relief.', isHoover: true,
+        feedback: [
+          'You made the same call as Hoover.',
+          'His logic was grounded in experience. After the 1927 Mississippi floods, he personally directed one of the most effective disaster relief operations in U.S. history — coordinating thousands of volunteers and private organizations without direct federal payments to individuals. It worked.',
+          'He believed that if he rallied business leaders and communities again, the American spirit would carry people through. He called White House conferences, urged wage restraint, and waited for the voluntary system to respond.'
+        ]
+      },
+      {
+        id: 'C', text: 'Cut federal spending and taxes to stimulate private investment and growth.',
+        feedback: [
+          'Hoover chose differently — and on this one, the historical evidence points pretty clearly in one direction.',
+          'Fiscal austerity during a severe recession — cutting government spending when private demand has already collapsed — was tried in Britain, Germany, and France during the 1930s. Most economists now consider it to have deepened the crisis. When both private investment and government spending fall simultaneously, there\'s nothing left to drive recovery.',
+          'Treasury Secretary Andrew Mellon actually pushed Hoover toward this approach — famously urging him to "liquidate labor, liquidate stocks, liquidate the farmers." Hoover resisted Mellon\'s most extreme advice. Most historians view that resistance as one of his better instincts.'
+        ]
+      },
+      {
+        id: 'D', text: 'Declare a national emergency and mobilize federal agencies to distribute food and supplies directly to Americans in need.',
+        feedback: [
+          'Hoover chose differently — but the approach you\'re describing has a notable track record.',
+          'FDR used emergency executive authority extensively in early 1933. He declared a bank holiday, mobilized federal agencies rapidly, and created the impression of decisive presidential action. Historians broadly credit his early months with restoring public confidence in ways Hoover\'s measured approach never achieved.',
+          'The risk Hoover would have cited: expanding executive power in ways that outlast the emergency. That concern wasn\'t unreasonable — but most Depression-era historians argue the situation called for exactly the kind of bold action this option represents.'
+        ]
+      }
+    ],
+    hooverChoiceLabel: 'Hoover chose Option B — voluntary cooperation.',
+    history: [
+      'Hoover organized White House conferences urging businesses to maintain wages and avoid layoffs. He called on local governments and charities to expand relief. He authorized federal public works spending — dams, roads, buildings — but held firm against direct federal aid to individuals.',
+      'It wasn\'t enough. Businesses facing their own losses ignored his appeals and cut wages anyway. Local relief systems collapsed. By 1932, unemployment reached 24%. Detroit and Philadelphia were essentially bankrupt. The voluntary system Hoover trusted simply wasn\'t built for a collapse at this scale.'
+    ],
+    evalQ: {
+      prompt: 'What best explains why Hoover\'s response fell short?',
+      choices: [
+        { id: 'A', correct: true,
+          text: 'Hoover wanted to help, but misjudged how quickly voluntary systems would be overwhelmed by a collapse at this scale.',
+          feedback: 'Hoover wasn\'t indifferent — he believed voluntarism would work because he\'d seen it work. The problem was his tools were calibrated for a normal recession, not a total economic collapse. He was slow to recognize the crisis had outgrown his framework.' },
+        { id: 'B', correct: false,
+          text: 'He had the right instincts, but the Federal Reserve\'s decision to tighten the money supply undermined his recovery strategy.',
+          feedback: 'The Fed\'s monetary contraction is a real part of the Depression\'s story — Milton Friedman later blamed it as a primary cause. But Hoover\'s refusal of direct federal relief was a separate problem. Even a better monetary policy wouldn\'t have gotten money to the families standing in breadlines.' },
+        { id: 'C', correct: false,
+          text: 'His approach was gaining traction through 1930, but Democratic majorities in Congress blocked his relief programs from taking hold.',
+          feedback: 'The historical record points the other way. Democrats in Congress pushed for more intervention than Hoover would accept — not less. His restraint was philosophical, not legislative. Unemployment kept rising throughout his presidency regardless of which party controlled Congress.' },
+        { id: 'D', correct: false,
+          text: 'Business and community leaders failed to honor their pledges — the voluntary system was undermined by the same interests it depended on.',
+          feedback: 'Business leaders did ignore Hoover\'s voluntary wage-restraint pledges once their own losses mounted — and that\'s a real part of the story. But blaming betrayal misses the deeper issue: Hoover\'s tools were calibrated for a normal downturn, not a total economic collapse. Even genuine cooperation would have been overwhelmed.' }
+      ]
+    }
+  },
+
+  {
+    id: 2, num: '02 / 03',
+    title: 'The Bonus Army',
+    date: 'Summer 1932',
+    scene: [
+      'More than 40,000 WWI veterans — unemployed, desperate, many with families — have camped in Washington demanding early payment of a bonus Congress promised them for 1945. Congress voted the bill down. They won\'t leave.',
+      'Your advisors are nervous. Some reports claim communist agitators have infiltrated the marchers. Washington wants action.'
+    ],
+    choicePrompt: 'What do you do?',
+    choices: [
+      {
+        id: 'A', text: 'Send Army troops to clear the camps by force.', isHoover: true,
+        feedback: [
+          'You made the same call as Hoover.',
+          'He saw the camps as an unlawful occupation — Congress had voted the bill down, and the veterans had no legal standing to remain. The (exaggerated) reports of communist infiltrators added urgency. He ordered the Army to clear the camps firmly but professionally.',
+          'He did not anticipate what General MacArthur would do with that order.'
+        ]
+      },
+      {
+        id: 'B', text: 'Meet personally with Bonus Army leaders and negotiate — early partial payment, or federal jobs.',
+        feedback: [
+          'Hoover chose differently — but direct negotiation with veterans had a much better track record.',
+          'FDR took this approach throughout the 1930s — meeting with veterans groups, listening, and finding accommodations. In 1936, he signed early bonus payments into law. The veterans received their money, went home, and nothing like the 1932 disaster occurred.',
+          'Many historians argue direct negotiation was always available to Hoover. He simply couldn\'t bring himself to see an encampment as a legitimate form of petition rather than an unlawful occupation.'
+        ]
+      },
+      {
+        id: 'C', text: 'Let them stay peacefully and work with Congress to fast-track partial bonus payment.',
+        feedback: [
+          'Hoover chose differently — but history suggests this option may have been less costly than what actually happened.',
+          'Congress did eventually pass early bonus payments — in 1936, over FDR\'s own veto. The veterans received their money. No collapse of authority followed. No flood of copycat protesters overwhelmed Washington.',
+          'The lesson: accommodation was possible. Most historians believe the political and human cost of paying the bonus early would have been far lower than the cost of the crackdown that actually occurred.'
+        ]
+      },
+      {
+        id: 'D', text: 'Offer veterans transportation home and a small stipend to leave voluntarily.',
+        feedback: [
+          'Hoover chose differently — but the approach you\'re describing was very much on the table.',
+          'Several cities facing their own Depression-era protest encampments chose quiet negotiation over confrontation. A modest exit offer — transportation and a small stipend — was actually proposed by some members of Congress during the Washington standoff.',
+          'The cost of such an offer would have been a fraction of what the crackdown cost Hoover in public trust, in reputation, and ultimately in votes. Whether it would have worked is uncertain, but the alternative turned out to be catastrophic.'
+        ]
+      }
+    ],
+    hooverChoiceLabel: 'Hoover chose Option A — he ordered the Army to clear the camps.',
+    history: [
+      'On July 28, 1932, Hoover ordered the Army to clear the Bonus Army camps. General Douglas MacArthur took command — and went far beyond his orders. MacArthur pursued the veterans across the Anacostia River and burned their main encampment to the ground. Tear gas, bayonets, and sabers were used. A veteran\'s infant died from gas exposure.',
+      'Photographs and newsreel footage spread across the country. Public outrage was immediate. For millions of Americans, the Bonus Army crackdown became the defining image of Hoover\'s presidency: a president willing to deploy the Army against his own veterans, but not willing to provide them relief.'
+    ],
+    evalQ: {
+      prompt: 'Why was the Bonus Army crackdown so damaging to Hoover politically?',
+      choices: [
+        { id: 'A', correct: false,
+          text: 'It confirmed Hoover would use decisive force against political opposition, making future negotiations with Congress impossible.',
+          feedback: 'The veterans weren\'t partisan opponents — they were desperate Americans making an appeal to their government. The damage wasn\'t strategic; it was moral. The crackdown confirmed, visually and publicly, that Hoover would act forcefully against struggling Americans while refusing to act on their behalf.' },
+        { id: 'B', correct: false,
+          text: 'Veterans were a decisive voting bloc in swing states, and their organized opposition directly cost Hoover the 1932 election.',
+          feedback: 'Veterans were certainly angry — but the crackdown\'s damage was broader than a single constituency. Newsreel footage and photographs spread nationwide and turned opinion against Hoover across the board. It became a defining symbol of his presidency to all Americans, not just veterans.' },
+        { id: 'C', correct: true,
+          text: 'It exposed a stark contradiction: Hoover would use federal power to remove veterans, but not to relieve their suffering.',
+          feedback: 'Exactly. Hoover\'s philosophy said government shouldn\'t intervene to help struggling individuals — but he had no hesitation using it against them. That contradiction was impossible to ignore, and it confirmed public anger at his presidency.' },
+        { id: 'D', correct: false,
+          text: 'MacArthur\'s defiance of direct orders made Hoover look unable to command his own military.',
+          feedback: 'MacArthur did exceed his orders significantly. But Hoover chose not to discipline or publicly contradict him afterward — which meant Americans held Hoover responsible for the outcome. Whether you see MacArthur as rogue or Hoover as complicit, the political damage landed on the president.' }
+      ]
+    }
+  },
+
+  {
+    id: 3, num: '03 / 03',
+    title: 'The Reconstruction Finance Corporation',
+    date: '1932',
+    scene: [
+      'Unemployment is at 24%. Banks are failing. Even you can see that voluntarism alone isn\'t working.',
+      'For the first time, you\'re proposing a major federal intervention: the Reconstruction Finance Corporation — a federal agency to loan money and stabilize the economy. The question is: who should the loans go to?'
+    ],
+    choicePrompt: 'How do you structure the RFC?',
+    choices: [
+      {
+        id: 'A', text: 'Limit it to loans for banks and corporations. Stabilizing the financial system benefits everyone eventually.', isHoover: true,
+        feedback: [
+          'You made the same call as Hoover.',
+          'He saw institutional lending as protecting infrastructure, not giving handouts. In his view, there was a meaningful difference between stabilizing the banking system and providing welfare to individuals. He was crossing one philosophical line — federal intervention — while drawing a new one: institutions, not people.',
+          'He believed that if the financial system held, recovery would eventually reach everyone.'
+        ]
+      },
+      {
+        id: 'B', text: 'Focus primarily on relief loans directly to unemployed Americans and struggling families, with some institutional support.',
+        feedback: [
+          'Hoover chose differently — but this approach has solid historical support.',
+          'FDR\'s New Deal included exactly this kind of direct lending. The Home Owners\' Loan Corporation (1933) refinanced over one million struggling mortgages. The Farm Credit Administration did the same for farmers. These programs are generally credited with faster, more visible results than institutional lending alone.',
+          'The argument for direct relief: if your goal is to restore consumer demand and human dignity, putting money in people\'s hands works faster than waiting for it to trickle down from stabilized banks.'
+        ]
+      },
+      {
+        id: 'C', text: 'Expand it to cover both financial institutions and state governments for relief — the crisis demands both.',
+        feedback: [
+          'Hoover chose differently — but this two-track approach is essentially what the New Deal ended up doing.',
+          'FDR kept and expanded the RFC for institutional stabilization while creating separate programs for direct relief. Most historians view the combination as more effective than either approach alone: institutional stability prevented additional bank failures, while direct relief addressed immediate human need and restored demand.',
+          'Hoover ultimately accepted limited state relief loans under congressional pressure — but he fought the expansion at every turn, and the amounts were far smaller than what Democrats requested.'
+        ]
+      },
+      {
+        id: 'D', text: 'Reject the RFC entirely — federal lending to private corporations sets a dangerous precedent.',
+        feedback: [
+          'Hoover chose differently — and this may be one of the few instances where historians largely side with him.',
+          'Treasury Secretary Andrew Mellon famously urged Hoover to "liquidate labor, liquidate stocks, liquidate the farmers" and let the Depression run its course. Hoover rejected that advice. Without the RFC\'s emergency lending, historians broadly agree that additional waves of bank failures in 1932 and 1933 would have been catastrophic.',
+          'The RFC\'s stabilization of the financial system may be one of Hoover\'s genuine, lasting contributions — even if the benefits flowed primarily to institutions rather than individuals.'
+        ]
+      }
+    ],
+    hooverChoiceLabel: 'Hoover chose Option A — loans to banks and corporations only.',
+    history: [
+      'The RFC launched in January 1932 and loaned over $1.5 billion to banks, railroads, and businesses in its first year. Under congressional pressure, Hoover eventually allowed limited state relief loans — but the amounts were small, came with strict repayment requirements, and were framed as emergency credit, not aid.',
+      'The RFC helped stabilize some banks and prevented additional failures. But it came too late to change the Depression\'s trajectory. The contrast wasn\'t lost on anyone: Hoover had spent two years refusing federal aid to unemployed workers, then handed billions to corporations. FDR used that contrast relentlessly in the 1932 campaign — and won in a landslide.',
+      'The RFC outlasted Hoover. FDR kept it, expanded it, and its framework — federal lending as an economic stabilization tool — became a permanent part of American government.'
+    ],
+    evalQ: {
+      prompt: 'What is the central tension in Hoover\'s decision to create the RFC?',
+      choices: [
+        { id: 'A', correct: false,
+          text: 'The RFC proved that targeted federal intervention could work — which undercut his argument that government should stay out of the economy.',
+          feedback: 'Hoover didn\'t see it as undermining his philosophy — he convinced himself there was a meaningful difference between lending to institutions and providing relief to individuals. Whether that distinction was principled or convenient is a fair question. The deeper tension wasn\'t logical; it was moral: he was willing to rescue banks but not workers.' },
+        { id: 'B', correct: false,
+          text: 'The RFC was too limited to stabilize the banking system, proving that once government intervenes, partial measures only deepen the crisis.',
+          feedback: 'The RFC actually provided significant stabilization — over $1.5 billion in loans in its first year. The problem wasn\'t that it was too small to work; it was that the people it served (banks and corporations) weren\'t the people who most needed help. FDR kept and expanded the RFC rather than replacing it.' },
+        { id: 'C', correct: true,
+          text: 'Hoover used federal power to rescue financial institutions while continuing to refuse it to struggling individuals.',
+          feedback: 'This is the core contradiction. He crossed a major philosophical line — but drew it specifically to protect banks and corporations, not workers. FDR summarized it bluntly during the 1932 campaign: Hoover believed in relief for the rich man, not the poor.' },
+        { id: 'D', correct: false,
+          text: 'Hoover created the RFC primarily to shore up Wall Street\'s support ahead of the 1932 election.',
+          feedback: 'The RFC wasn\'t a cynical political maneuver — Hoover believed institutional stabilization was the right approach. His problem wasn\'t cynicism; it was conviction. He truly believed that saving banks would eventually help everyone. The political damage came because the public had stopped believing the benefits would ever reach them.' }
+      ]
+    }
+  }
+];
+
+const SYNTHESIS = {
+  prompt: 'You\'ve now lived through three pivotal moments in Hoover\'s presidency. Each time, his response fell short — sometimes in ways he could have anticipated, sometimes in ways that blindsided him. What best explains the gap between his intentions and what actually happened?',
+  choices: [
+    { id: 'A', correct: false,
+      text: 'Hoover simply didn\'t care enough about ordinary Americans.',
+      feedback: 'Most historians push back hard on this. Before the presidency, Hoover spent years organizing humanitarian relief — including food aid for millions of Europeans after World War I. He wasn\'t indifferent. The problem was that he was deeply committed to a philosophy that wasn\'t equal to the scale of the crisis.' },
+    { id: 'B', correct: false,
+      text: 'Hoover lacked the imagination to conceive of a different kind of federal response.',
+      feedback: 'This is a compelling answer that many historians find persuasive. Hoover could adapt his tools — the RFC shows that. But he couldn\'t reimagine the government\'s fundamental role. His ideology wasn\'t just a preference; it was a ceiling on what solutions he could see as legitimate.' },
+    { id: 'C', correct: false,
+      text: 'The Depression was so unprecedented that any president would have failed the same way.',
+      feedback: 'There\'s something to this — it was catastrophic, and no president would have sailed through it easily. But most historians argue Hoover\'s specific choices mattered. His refusal of federal relief prolonged suffering, and the Bonus Army crackdown accelerated his political collapse.' },
+    { id: 'D', correct: true,
+      text: 'All three factors: his values shaped what he\'d do, his imagination limited what he could see, and the scale of the Depression overwhelmed all of it.',
+      feedback: 'This is the most defensible answer — and the hardest to sit with. Hoover wasn\'t a villain, and he wasn\'t simply unlucky. His values, his limits, and his circumstances all played a role. That complexity is exactly what makes his presidency worth studying.' }
+  ]
+};
+
+// ── State ─────────────────────────────────────────────────
+const state = {
+  phase: 'intro',
+  scenarioIndex: 1,
+  scenarioStep: 'choices',
+  choices:  {},
+  branches: {},
+  evalAnswers: {},
+  synthChoice: null,
+  furthest: 0
+};
+
+// ── Progress HUD ──────────────────────────────────────────
+const PHASES = ['intro','scenario-1','scenario-2','scenario-3','synthesis','completion'];
+const LABELS = {
+  'intro':      'Intro',
+  'scenario-1': 'Crisis 01',
+  'scenario-2': 'Crisis 02',
+  'scenario-3': 'Crisis 03',
+  'synthesis':  'Verdict',
+  'completion': 'End'
+};
+const HUD_DESTINATIONS = {
+  'intro':      () => renderIntro(),
+  'scenario-1': () => goToScenario(1, 'choices'),
+  'scenario-2': () => goToScenario(2, 'choices'),
+  'scenario-3': () => goToScenario(3, 'choices'),
+  'synthesis':  () => renderSynthesis(),
+  'completion': () => renderCompletion()
+};
+
+function currentPhaseKey() {
+  if (state.phase === 'scenario') return `scenario-${state.scenarioIndex}`;
+  return state.phase;
+}
+
+function updateProgress(newPhaseKey) {
+  if (newPhaseKey) {
+    const idx = PHASES.indexOf(newPhaseKey);
+    if (idx > state.furthest) state.furthest = idx;
+  }
+  const curKey = currentPhaseKey();
+  const curIdx = PHASES.indexOf(curKey);
+  const hud = document.getElementById('hudSteps');
+  hud.innerHTML = '';
+  PHASES.forEach((p, i) => {
+    if (i > 0) {
+      const line = document.createElement('div');
+      line.className = 'hud-line';
+      line.setAttribute('aria-hidden', 'true');
+      hud.appendChild(line);
+    }
+    const btn = document.createElement('button');
+    btn.className = 'hud-btn' + (i === curIdx ? ' active' : i < curIdx ? ' done' : '');
+    btn.setAttribute('role', 'listitem');
+    btn.setAttribute('aria-current', i === curIdx ? 'step' : 'false');
+    btn.setAttribute('aria-label', `Go to ${LABELS[p]}`);
+    btn.innerHTML = `<span class="hud-node" aria-hidden="true"></span><span>${LABELS[p]}</span>`;
+    if (i > state.furthest) {
+      btn.disabled = true;
+      btn.setAttribute('aria-disabled', 'true');
+    } else {
+      btn.addEventListener('click', () => HUD_DESTINATIONS[p]());
+    }
+    hud.appendChild(btn);
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────────
+function bannerHTML(tag, id, title, date, eyebrow, extraClass) {
+  const xl = extraClass && extraClass.includes('intro');
+  return `<div class="page-banner${extraClass ? ' ' + extraClass : ''}">
+    <div class="banner-bunting" aria-hidden="true"></div>
+    <div class="banner-body">
+      <div class="container">
+        ${eyebrow ? `<p class="banner-eyebrow" aria-hidden="true">${eyebrow}</p>` : ''}
+        <div class="banner-ornament" aria-hidden="true"><span class="banner-ornament-text">★ ★ ★</span></div>
+        <${tag} id="${id}" class="banner-title${xl ? ' banner-title-xl' : ''}">${title}</${tag}>
+        <div class="banner-ornament" aria-hidden="true"><span class="banner-ornament-text">★ ★ ★</span></div>
+        <p class="banner-date">${date}</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+function reveal(el) {
+  requestAnimationFrame(() => setTimeout(() => {
+    el.classList.add('revealed');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 40));
+}
+
+function scrollToEl(el, delay = 300) {
+  setTimeout(() => el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), delay);
+}
+
+function stepPips(active) {
+  const labels = ['Your Choice', 'Your Outcome', 'Hoover\'s Record'];
+  const pips = [0,1,2].map(i =>
+    `<span class="step-pip ${i < active ? 'done' : i === active ? 'active' : ''}" aria-hidden="true"></span>`
+  ).join('');
+  return `<div class="step-indicator" aria-label="Step ${active + 1} of 3: ${labels[active]}">
+    ${pips}<span class="step-label">${labels[active]}</span>
+  </div>`;
+}
+
+function buildEvalHTML(questions, idPrefix, saved) {
+  return questions.map(c => {
+    const savedCorrect = saved && questions.find(x => x.id === saved)?.correct;
+    let cls = '';
+    if (saved) {
+      if (c.id === saved) cls = c.correct ? ' correct' : ' incorrect';
+      if (!savedCorrect && c.correct) cls = ' correct';
+    }
+    return `<button class="eval-btn${cls}" data-choice="${c.id}" data-correct="${c.correct}"
+        aria-label="Option ${c.id}: ${c.text}">
+      <span class="eval-key" aria-hidden="true">${c.id}</span>
+      <span class="eval-text">${c.text}</span>
+    </button>
+    <div class="eval-feedback${saved === c.id ? ' shown' : ''}" id="${idPrefix}-${c.id}" role="status">${c.feedback}</div>`;
+  }).join('');
+}
+
+function attachEvalHandlers(sec, questions, idPrefix, onAnswer) {
+  sec.querySelectorAll('.eval-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const choiceId = btn.dataset.choice;
+      const correct = btn.dataset.correct === 'true';
+      sec.querySelectorAll('.eval-btn').forEach(b => b.classList.remove('correct','incorrect'));
+      sec.querySelectorAll('.eval-feedback').forEach(f => f.classList.remove('shown'));
+      sec.querySelectorAll('.eval-btn').forEach(b => {
+        if (b.dataset.choice === choiceId) b.classList.add(correct ? 'correct' : 'incorrect');
+        if (!correct && b.dataset.correct === 'true') b.classList.add('correct');
+      });
+      const fb = document.getElementById(`${idPrefix}-${choiceId}`);
+      if (fb) fb.classList.add('shown');
+      onAnswer(choiceId);
+    });
+  });
+}
+
+// ── Intro ─────────────────────────────────────────────────
+function renderIntro() {
+  state.phase = 'intro';
+  updateProgress('intro');
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.setAttribute('aria-labelledby', 'intro-h');
+  sec.innerHTML = `
+    ${bannerHTML('h1', 'intro-h', 'You Are the President', 'Washington, D.C. · 1929–1933', '★ Presidential Decision Simulation ★', 'page-banner-intro')}
+    <div class="body-wrap">
+      <div class="container">
+        <div class="scene-setter">
+          <p>The Great Depression is tightening its grip. You've been in office less than two years and the economy is in free fall. Unemployment is rising, banks are wobbling, and millions of Americans are struggling to survive.</p>
+          <p>Over the next three scenarios, you'll face the same decisions Herbert Hoover faced — and discover what he actually chose, and what happened as a result.</p>
+        </div>
+        <div class="step-nav nav-right" style="border-top:none;padding-top:0;margin-top:0;">
+          <button class="nav-btn nav-fwd" id="startBtn">
+            Begin <span class="arrow" aria-hidden="true">&#9654;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  main.appendChild(sec);
+  reveal(sec);
+  document.getElementById('startBtn').addEventListener('click', () => goToScenario(1, 'choices'));
+}
+
+// ── Scenario Step 1: Your Choice ──────────────────────────
+function renderChoices(n) {
+  const s = SCENARIOS[n - 1];
+  state.phase = 'scenario'; state.scenarioIndex = n; state.scenarioStep = 'choices';
+  updateProgress(`scenario-${n}`);
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.setAttribute('aria-labelledby', `sc-h-${n}`);
+
+  const choicesHTML = s.choices.map(c =>
+    `<button class="choice-btn" data-choice="${c.id}" aria-label="Option ${c.id}: ${c.text}">
+      <span class="choice-key" aria-hidden="true">${c.id}</span>
+      <span class="choice-text">${c.text}</span>
+    </button>`
+  ).join('');
+
+  sec.innerHTML = `
+    ${bannerHTML('h2', `sc-h-${n}`, s.title, s.date, `Crisis ${s.num}`)}
+    <div class="body-wrap">
+      <div class="container">
+        ${stepPips(0)}
+        <div class="scene-setter" role="region" aria-label="Situation">
+          ${s.scene.map(p => `<p>${p}</p>`).join('')}
+        </div>
+        <p class="choice-prompt-text" id="cp-${n}">${s.choicePrompt}</p>
+        <div class="choices" role="group" aria-labelledby="cp-${n}">${choicesHTML}</div>
+        <div class="step-nav ${n === 1 ? 'nav-right' : ''}">
+          ${n > 1 ? `<button class="nav-btn nav-back" id="navBack">
+            <span class="arrow" aria-hidden="true">&#9664;</span> Previous
+          </button>` : ''}
+          <button class="nav-btn nav-fwd" id="navFwd" disabled>
+            See Your Outcome <span class="arrow" aria-hidden="true">&#9654;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  main.appendChild(sec);
+  reveal(sec);
+
+  sec.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cid = btn.dataset.choice;
+      const hooverId = s.choices.find(c => c.isHoover).id;
+      state.choices[n]  = cid;
+      state.branches[n] = cid === hooverId ? 'match' : 'diff';
+      delete state.evalAnswers[n];
+      goToScenario(n, 'feedback');
+    });
+  });
+
+  if (n > 1) {
+    document.getElementById('navBack')?.addEventListener('click', () => goToScenario(n - 1, 'history'));
+  }
+}
+
+// ── Scenario Step 2: Your Outcome ─────────────────────────
+function renderFeedback(n) {
+  const s = SCENARIOS[n - 1];
+  const cid = state.choices[n];
+  const choiceObj = s.choices.find(c => c.id === cid);
+  const isMatch = state.branches[n] === 'match';
+  state.phase = 'scenario'; state.scenarioIndex = n; state.scenarioStep = 'feedback';
+  updateProgress(`scenario-${n}`);
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.setAttribute('aria-labelledby', `fb-h-${n}`);
+
+  const choicesHTML = s.choices.map(c =>
+    `<button class="choice-btn${c.id === cid ? ' picked' : ''}" disabled aria-disabled="true"
+        aria-label="Option ${c.id}: ${c.text}${c.id === cid ? ' — your choice' : ''}">
+      <span class="choice-key" aria-hidden="true">${c.id}</span>
+      <span class="choice-text">${c.text}</span>
+    </button>`
+  ).join('');
+
+  const [first, ...rest] = choiceObj.feedback;
+
+  sec.innerHTML = `
+    ${bannerHTML('h2', `fb-h-${n}`, s.title, s.date, `Crisis ${s.num}`)}
+    <div class="body-wrap">
+      <div class="container">
+        ${stepPips(1)}
+        <div class="section-label" aria-hidden="true">You chose</div>
+        <div class="choices" role="group" aria-label="Your selection">${choicesHTML}</div>
+        <div class="feedback-panel ${isMatch ? 'fb-match' : 'fb-diff'}"
+             role="region" aria-label="${isMatch ? 'You matched Hoover' : 'Counterfactual outcome'}"
+             style="margin-top:22px;">
+          <p class="fb-verdict" aria-hidden="true">${isMatch ? '★ You Made the Same Call as Hoover' : '◆ Hoover Chose Differently'}</p>
+          <p><strong>${first}</strong></p>
+          ${rest.map(p => `<p>${p}</p>`).join('')}
+        </div>
+        <div class="step-nav">
+          <button class="nav-btn nav-back" id="navBack">
+            <span class="arrow" aria-hidden="true">&#9664;</span> Try a Different Choice
+          </button>
+          <button class="nav-btn nav-fwd" id="navFwd">
+            See What Hoover Did <span class="arrow" aria-hidden="true">&#9654;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  main.appendChild(sec);
+  reveal(sec);
+
+  document.getElementById('navBack').addEventListener('click', () => {
+    delete state.choices[n]; delete state.branches[n];
+    goToScenario(n, 'choices');
+  });
+  document.getElementById('navFwd').addEventListener('click', () => goToScenario(n, 'history'));
+}
+
+// ── Scenario Step 3: Hoover's Record ─────────────────────
+function renderHistory(n) {
+  const s = SCENARIOS[n - 1];
+  const cid = state.choices[n];
+  const isMatch = state.branches[n] === 'match';
+  state.phase = 'scenario'; state.scenarioIndex = n; state.scenarioStep = 'history';
+  updateProgress(`scenario-${n}`);
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.setAttribute('aria-labelledby', `hi-h-${n}`);
+
+  const savedEval = state.evalAnswers[n] || null;
+
+  const choicesHTML = s.choices.map(c => {
+    let cls = '';
+    if (c.id === cid && c.isHoover) cls = ' picked is-hoover';
+    else if (c.id === cid) cls = ' not-hoover';
+    else if (c.isHoover) cls = ' is-hoover';
+    const lbl = [c.id === cid ? 'your choice' : null, c.isHoover ? "Hoover's actual choice" : null].filter(Boolean).join(' — ');
+    return `<button class="choice-btn${cls}" disabled aria-disabled="true"
+        aria-label="Option ${c.id}: ${c.text}${lbl ? ` — ${lbl}` : ''}">
+      <span class="choice-key" aria-hidden="true">${c.id}</span>
+      <span class="choice-text">${c.text}</span>
+    </button>`;
+  }).join('');
+
+  const evalHTML = buildEvalHTML(s.evalQ.choices, `ef-${n}`, savedEval);
+  const isLast = n === 3;
+
+  sec.innerHTML = `
+    ${bannerHTML('h2', `hi-h-${n}`, s.title, s.date, `Crisis ${s.num}`)}
+    <div class="body-wrap">
+      <div class="container">
+        ${stepPips(2)}
+        <div class="section-label" aria-hidden="true">What Hoover actually chose</div>
+        <div class="choices" role="group" aria-label="Choices with Hoover's actual pick">${choicesHTML}</div>
+        ${!isMatch ? `<p style="font-size:.9rem;color:var(--text-dim);margin-top:12px;font-style:italic;"
+            aria-label="${s.hooverChoiceLabel}">&#8594; ${s.hooverChoiceLabel}</p>` : ''}
+        <div class="section-label" style="margin-top:32px;" aria-hidden="true">What happened</div>
+        <div class="history-box" role="region" aria-label="Historical record">
+          ${s.history.map(p => `<p>${p}</p>`).join('')}
+        </div>
+        <div class="eval-wrap" role="region" aria-label="Check your understanding">
+          <div class="section-label" aria-hidden="true">Check your understanding</div>
+          <p class="eval-prompt" id="eq-${n}">${s.evalQ.prompt}</p>
+          <div class="eval-choices" role="group" aria-labelledby="eq-${n}">${evalHTML}</div>
+          <p class="eval-note" aria-live="polite">${savedEval ? 'Changed your mind? Select a different answer above.' : 'Select an answer to continue.'}</p>
+        </div>
+        <div class="step-nav">
+          <button class="nav-btn nav-back" id="navBack">
+            <span class="arrow" aria-hidden="true">&#9664;</span> Back
+          </button>
+          <button class="nav-btn nav-fwd" id="navFwd" ${savedEval ? '' : 'disabled'}>
+            ${isLast ? 'Final Verdict' : 'Next Crisis'}
+            <span class="arrow" aria-hidden="true">&#9654;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  main.appendChild(sec);
+  reveal(sec);
+
+  attachEvalHandlers(sec, s.evalQ.choices, `ef-${n}`, choiceId => {
+    state.evalAnswers[n] = choiceId;
+    const note = sec.querySelector('.eval-note');
+    if (note) note.textContent = 'Changed your mind? Select a different answer above.';
+    const fwd = document.getElementById('navFwd');
+    if (fwd) { fwd.disabled = false; scrollToEl(fwd); }
+  });
+
+  document.getElementById('navBack').addEventListener('click', () => goToScenario(n, 'feedback'));
+  document.getElementById('navFwd').addEventListener('click', () => {
+    if (!state.evalAnswers[n]) return;
+    if (isLast) { state.phase = 'synthesis'; updateProgress('synthesis'); renderSynthesis(); }
+    else goToScenario(n + 1, 'choices');
+  });
+}
+
+// ── Navigation coordinator ────────────────────────────────
+function goToScenario(n, step) {
+  state.phase = 'scenario'; state.scenarioIndex = n; state.scenarioStep = step;
+  if (step === 'choices')  renderChoices(n);
+  if (step === 'feedback') renderFeedback(n);
+  if (step === 'history')  renderHistory(n);
+}
+
+// ── Synthesis ─────────────────────────────────────────────
+function renderSynthesis() {
+  state.phase = 'synthesis';
+  updateProgress('synthesis');
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.setAttribute('aria-labelledby', 'sy-h');
+
+  const saved = state.synthChoice;
+  const choicesHTML = buildEvalHTML(SYNTHESIS.choices, 'sf', saved);
+
+  sec.innerHTML = `
+    <div class="body-wrap" style="padding-top:52px;">
+      <div class="container">
+        <p style="font-family:'Oswald',sans-serif;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;" aria-hidden="true">◆ Final Assessment</p>
+        <h2 id="sy-h" class="synth-title">Assessing the Presidency</h2>
+        <p class="synth-prompt">${SYNTHESIS.prompt}</p>
+        <div class="eval-choices" role="group" aria-label="Final assessment choices" style="margin-top:22px;">
+          ${choicesHTML}
+        </div>
+        <p class="eval-note" aria-live="polite">${saved ? 'Changed your mind? Select a different answer above.' : 'Select an answer to continue.'}</p>
+        <div class="step-nav">
+          <button class="nav-btn nav-back" id="navBack">
+            <span class="arrow" aria-hidden="true">&#9664;</span> Back to Crisis 03
+          </button>
+          <button class="nav-btn nav-fwd" id="navFwd" ${saved ? '' : 'disabled'}>
+            See the Verdict <span class="arrow" aria-hidden="true">&#9654;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  main.appendChild(sec);
+  reveal(sec);
+
+  attachEvalHandlers(sec, SYNTHESIS.choices, 'sf', cid => {
+    state.synthChoice = cid;
+    const note = sec.querySelector('.eval-note');
+    if (note) note.textContent = 'Changed your mind? Select a different answer above.';
+    const fwd = document.getElementById('navFwd');
+    if (fwd) { fwd.disabled = false; scrollToEl(fwd); }
+  });
+
+  document.getElementById('navBack').addEventListener('click', () => goToScenario(3, 'history'));
+  document.getElementById('navFwd').addEventListener('click', () => {
+    if (!state.synthChoice) return;
+    state.phase = 'completion'; updateProgress('completion'); renderCompletion();
+  });
+}
+
+// ── Completion ────────────────────────────────────────────
+function renderCompletion() {
+  state.phase = 'completion';
+  updateProgress('completion');
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const sec = document.createElement('div');
+  sec.className = 'section';
+  sec.setAttribute('aria-labelledby', 'co-h');
+
+  const reviewHTML = SCENARIOS.map(s => {
+    const cid = state.choices[s.id];
+    const branch = state.branches[s.id];
+    const choiceObj = s.choices.find(c => c.id === cid);
+    const hooverObj = s.choices.find(c => c.isHoover);
+    return `<div class="dossier-item">
+      <h4>${s.num} — ${s.title}</h4>
+      <p class="dossier-line"><strong>Your choice (${cid || '—'}):</strong> ${choiceObj?.text || 'Not answered'}</p>
+      <p class="dossier-line"><strong>Hoover's actual choice (${hooverObj.id}):</strong> ${hooverObj.text}</p>
+      <span class="dossier-tag ${branch || 'diff'}">${branch === 'match' ? '★ Matched Hoover' : '◆ Chose Differently'}</span>
+    </div>`;
+  }).join('');
+
+  sec.innerHTML = `
+    ${bannerHTML('h2', 'co-h', 'A President Undone', 'Herbert Hoover · 1929–1933', '◆ Activity Complete', 'page-banner-completion')}
+    <div class="body-wrap">
+      <div class="container">
+        <div class="completion-text" role="region" aria-label="Closing assessment">
+          <p>Herbert Hoover entered office as one of the most accomplished men ever to hold the presidency. He left as one of the most reviled. His story is a reminder that good intentions, strong principles, and genuine competence are not always enough — especially when the principles themselves become a barrier to action.</p>
+          <p>The Great Depression demanded a reimagining of what government was for. Hoover could not make that leap. Franklin Roosevelt would.</p>
+        </div>
+        <div class="callout" role="region" aria-labelledby="phil-h">
+          <h3 id="phil-h">Hoover's Governing Philosophy</h3>
+          <p>Throughout the scenarios, you saw the same logic applied repeatedly. Hoover believed in <strong>voluntarism</strong>: private charity, local governments, and community effort — not Washington — should solve social problems. And in <strong>rugged individualism</strong>: self-reliance built this country, and dependency on the federal government would erode it.</p>
+          <p>These weren't empty slogans. He had organized massive food relief across Europe after World War I — without direct government handouts — and it worked. He believed the same approach could work again. Understanding why he was wrong, and why he couldn't see it, is the central lesson of his presidency.</p>
+        </div>
+        <div class="dossier" aria-label="Your choices across all three crises">
+          <button class="dossier-btn" id="dossierBtn" aria-expanded="false" aria-controls="dossierBody">
+            <span class="dossier-label">Mission Dossier — Review Your Choices</span>
+            <span class="dossier-arrow" aria-hidden="true">&#9660;</span>
+          </button>
+          <div class="dossier-body" id="dossierBody" role="region" aria-labelledby="dossierBtn">
+            <div class="dossier-inner">${reviewHTML}</div>
+          </div>
+        </div>
+        <div class="step-nav">
+          <button class="nav-btn nav-back" id="navBack">
+            <span class="arrow" aria-hidden="true">&#9664;</span> Back to Synthesis
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  main.appendChild(sec);
+  reveal(sec);
+
+  document.getElementById('dossierBtn').addEventListener('click', () => {
+    const btn = document.getElementById('dossierBtn');
+    const body = document.getElementById('dossierBody');
+    const open = body.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+
+  document.getElementById('navBack').addEventListener('click', () => {
+    state.phase = 'synthesis'; updateProgress('synthesis'); renderSynthesis();
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────
+updateProgress('intro');
+renderIntro();
+</script>
+</body>
+</html>
