@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Causes of the Great Depression — Interactive Activity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1a2744;
+      --offwhite: #f5f0e8;
+      --sepia:  #8b6914;
+      --card-bg: #f0ebe0;
+      --slate:  #4a5568;
+      --amber:  #b45309;
+      --amber-bg: #fef3c7;
+      --slate-bg: #e2e8f0;
+      --navy-bg: #dde3f0;
+      --shadow: 0 2px 8px rgba(26,39,68,0.13);
+      --shadow-lg: 0 6px 24px rgba(26,39,68,0.18);
+      --radius: 10px;
+      --transition: 300ms ease;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      background: var(--offwhite);
+      color: #1a1a1a;
+      min-height: 100vh;
+      line-height: 1.65;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', Georgia, serif;
+      line-height: 1.25;
+    }
+
+    /* ===== Layout ===== */
+    .activity-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 16px 64px;
+    }
+
+    /* ===== Progress Bar ===== */
+    .progress-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .progress-label {
+      font-family: 'Source Serif 4', Georgia, serif;
+      color: var(--offwhite);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+
+    .progress-dots {
+      display: flex;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .progress-dots li {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--offwhite);
+      background: transparent;
+      transition: background var(--transition);
+    }
+
+    .progress-dots li.active { background: var(--offwhite); }
+    .progress-dots li.done { background: #7fa8d4; border-color: #7fa8d4; cursor: pointer; }
+    .progress-dots li.done:hover { background: #5a8fc4; border-color: #5a8fc4; }
+    .progress-dots li.done:focus-visible { outline: 2px solid var(--offwhite); outline-offset: 3px; }
+
+    /* ===== Screen Transitions ===== */
+    .screen {
+      display: none;
+      opacity: 0;
+      animation: fadeIn 300ms ease forwards;
+    }
+
+    .screen.visible {
+      display: block;
+      opacity: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Section Headings ===== */
+    .step-heading {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      color: var(--navy);
+      margin: 36px 0 12px;
+    }
+
+    .step-intro {
+      font-size: 1.05rem;
+      color: #333;
+      max-width: 780px;
+      margin-bottom: 28px;
+    }
+
+    .step-intro strong { color: var(--navy); }
+
+    /* ===== Buttons ===== */
+    .btn {
+      display: inline-block;
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 28px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:focus-visible { outline: 3px solid var(--sepia); outline-offset: 3px; }
+
+    .btn-primary {
+      background: var(--navy);
+      color: var(--offwhite);
+    }
+
+    .btn-primary:disabled {
+      background: #9aa5b4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: var(--sepia);
+      color: #fff;
+    }
+
+    .btn-return {
+      background: var(--offwhite);
+      color: var(--navy);
+      border: 2px solid var(--navy);
+    }
+
+    /* ===== Step 1: Flashcards ===== */
+    .flashcard-counter {
+      font-size: 1rem;
+      color: var(--sepia);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .flashcard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .flip-card:last-child {
+      grid-column: 2;
+    }
+
+    /* 3D Flip Card */
+    .flip-card {
+      height: 280px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .flip-card:focus-visible { outline: 3px solid var(--sepia); border-radius: var(--radius); outline-offset: 2px; }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.45,0,0.55,1);
+      border-radius: var(--radius);
+    }
+
+    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .flip-card-front {
+      background: var(--navy);
+      color: var(--offwhite);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .flip-card-front .card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .flip-card-front .flip-hint {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      opacity: 0.65;
+      font-style: italic;
+    }
+
+    .flip-card-back {
+      background: var(--card-bg);
+      color: #1a1a1a;
+      transform: rotateY(180deg);
+      overflow-y: auto;
+    }
+
+    .flip-card-back .card-title-small {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--sepia);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .flip-card-back .card-desc {
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .flip-card.explored .flip-card-front {
+      background: #2d4a7a;
+    }
+
+    .step1-actions {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* ===== Step 2: Chronological Ordering ===== */
+    .order-instructions {
+      background: var(--card-bg);
+      border-left: 4px solid var(--sepia);
+      padding: 14px 18px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .order-instructions strong { color: var(--navy); }
+
+    .sortable-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+      min-height: 60px;
+    }
+
+    .order-card {
+      background: var(--navy);
+      color: var(--offwhite);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      cursor: grab;
+      user-select: none;
+      position: relative;
+      touch-action: none;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.97rem;
+      font-weight: 600;
+    }
+
+    .order-card:active { cursor: grabbing; }
+    .order-card.dragging { opacity: 0.45; box-shadow: var(--shadow-lg); }
+    .order-card.drag-over { outline: 2px dashed var(--sepia); }
+
+    .order-card:focus-visible { outline: 3px solid var(--sepia); outline-offset: 2px; }
+
+    .card-rank {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      opacity: 0.6;
+      min-width: 28px;
+    }
+
+    .card-move-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .btn-move {
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: #fff;
+      width: 26px;
+      height: 22px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .btn-move:hover { background: rgba(255,255,255,0.32); }
+    .btn-move:focus-visible { outline: 2px solid var(--sepia); }
+
+    .tooltip {
+      display: none;
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      transform: translateX(-50%);
+      background: rgba(26,39,68,0.97);
+      color: #fff;
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 0.78rem;
+      font-weight: 400;
+      padding: 8px 12px;
+      border-radius: 6px;
+      max-width: 280px;
+      line-height: 1.5;
+      z-index: 200;
+      pointer-events: none;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .order-card.tooltip-open .tooltip { display: block; }
+
+    .tooltip-trigger { cursor: pointer; }
+    .tooltip-hint { font-size: 0.75rem; opacity: 0.55; vertical-align: middle; }
+
+    .step2-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+
+    /* ===== Step 2 Feedback ===== */
+    .feedback-box {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-top: 24px;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--sepia);
+    }
+
+    .feedback-box h3 {
+      font-size: 1.25rem;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+
+    .feedback-box p, .feedback-box li { font-size: 0.97rem; line-height: 1.7; margin-bottom: 10px; }
+    .feedback-box ul { padding-left: 22px; }
+    .feedback-box li { margin-bottom: 4px; }
+    .feedback-box strong { color: var(--navy); }
+
+    .era-heading {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0 0 4px;
+    }
+
+    .era-chips {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .era-chip {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--navy);
+      color: var(--offwhite);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 0.85rem;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+
+    /* ===== Step 3: Category Sorting ===== */
+    .unsorted-pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 18px;
+      background: rgba(26,39,68,0.06);
+      border-radius: var(--radius);
+      min-height: 64px;
+      margin-bottom: 28px;
+      border: 2px dashed #b0aaa0;
+    }
+
+    .unsorted-pool.drag-target { border-color: var(--sepia); background: rgba(139,105,20,0.07); }
+
+    .sort-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 680px) {
+      .sort-columns { grid-template-columns: 1fr; }
+    }
+
+    .sort-column {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-header {
+      padding: 14px 16px;
+      color: #fff;
+    }
+
+    .col-header.prior { background: var(--navy); }
+    .col-header.trigger { background: var(--amber); }
+    .col-header.extending { background: var(--slate); }
+
+    .col-header h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .col-header .col-def {
+      font-size: 0.8rem;
+      opacity: 0.88;
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .col-count {
+      font-size: 0.78rem;
+      font-weight: 600;
+      opacity: 0.8;
+      margin-top: 6px;
+      font-family: 'Source Serif 4', Georgia, serif;
+    }
+
+    .col-drop-zone {
+      background: #fff;
+      min-height: 120px;
+      padding: 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+
+    .col-drop-zone.drag-target { background: var(--amber-bg); }
+    .sort-column.col-prior .col-drop-zone.drag-target { background: var(--navy-bg); }
+    .sort-column.col-extending .col-drop-zone.drag-target { background: var(--slate-bg); }
+
+    /* Sort chips */
+    .sort-chip {
+      background: var(--navy);
+      color: var(--offwhite);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: grab;
+      user-select: none;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      position: relative;
+      touch-action: none;
+    }
+
+    .sort-chip:active { cursor: grabbing; }
+    .sort-chip.dragging { opacity: 0.4; }
+    .sort-chip:focus-visible { outline: 3px solid var(--sepia); outline-offset: 2px; }
+
+    .chip-in-pool .sort-chip { background: var(--navy); }
+
+    .chip-remove-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .chip-remove-btn:hover { background: rgba(255,255,255,0.38); }
+    .chip-remove-btn:focus-visible { outline: 2px solid var(--sepia); }
+
+    /* Tap-to-select for Step 3 */
+    .tap-select-mode .sort-chip { cursor: pointer; }
+    .sort-chip.selected-for-move {
+      outline: 3px solid var(--sepia);
+      outline-offset: 2px;
+    }
+
+    .col-tap-btn {
+      display: none;
+      width: 100%;
+      padding: 8px;
+      background: rgba(26,39,68,0.08);
+      border: 2px dashed #9aa5b4;
+      border-radius: 6px;
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s;
+    }
+
+    .col-tap-btn.show { display: block; }
+    .col-tap-btn:hover { background: rgba(26,39,68,0.15); }
+
+    .step3-actions { margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* ===== Step 3 Feedback ===== */
+    .classification-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    @media (max-width: 680px) {
+      .classification-grid { grid-template-columns: 1fr; }
+    }
+
+    .class-column {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .class-column-header {
+      padding: 10px 14px;
+      color: #fff;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .class-column-header.prior { background: var(--navy); }
+    .class-column-header.trigger { background: var(--amber); }
+    .class-column-header.extending { background: var(--slate); }
+
+    .class-column-body {
+      background: var(--card-bg);
+      padding: 10px 14px;
+    }
+
+    .class-column-body ul { padding-left: 18px; }
+    .class-column-body li { font-size: 0.88rem; margin-bottom: 4px; }
+
+    /* ===== Completion Screen ===== */
+    .completion-hero {
+      text-align: center;
+      padding: 48px 20px 32px;
+    }
+
+    .completion-hero h2 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      color: var(--navy);
+      margin-bottom: 18px;
+    }
+
+    .completion-hero p {
+      font-size: 1.07rem;
+      max-width: 680px;
+      margin: 0 auto 14px;
+      color: #333;
+      line-height: 1.7;
+    }
+
+    /* Review collapsible */
+    .review-section {
+      margin-top: 32px;
+    }
+
+    .review-toggle {
+      background: none;
+      border: 2px solid var(--navy);
+      color: var(--navy);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.15s;
+    }
+
+    .review-toggle:hover { background: rgba(26,39,68,0.06); }
+    .review-toggle:focus-visible { outline: 3px solid var(--sepia); outline-offset: 2px; }
+    .review-toggle .toggle-icon { transition: transform 0.25s; }
+    .review-toggle.open .toggle-icon { transform: rotate(180deg); }
+
+    .review-content {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .review-content.open { display: block; }
+
+    .review-compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 560px) {
+      .review-compare-grid { grid-template-columns: 1fr; }
+    }
+
+    .review-col {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .review-col h4 {
+      font-size: 0.95rem;
+      color: var(--navy);
+      margin-bottom: 10px;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    .review-chip {
+      display: inline-block;
+      background: var(--navy);
+      color: var(--offwhite);
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 0.78rem;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 600;
+      margin: 3px 3px 3px 0;
+    }
+
+    .review-chip.prior-chip { background: var(--navy); }
+    .review-chip.trigger-chip { background: var(--amber); }
+    .review-chip.extending-chip { background: var(--slate); }
+
+    .review-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+      color: var(--sepia);
+    }
+
+    .review-group { margin-bottom: 12px; }
+
+    /* ===== Live region for screen readers ===== */
+    #sr-live {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+    }
+
+    /* ===== Utility ===== */
+    .hidden { display: none !important; }
+    .mt-24 { margin-top: 24px; }
+    .mt-16 { margin-top: 16px; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 540px) {
+      .flashcard-grid { grid-template-columns: repeat(2, 1fr); }
+      .flip-card:last-child { grid-column: 1 / -1; }
+      .flip-card { height: 220px; }
+      .flip-card-front .card-title { font-size: 0.9rem; }
+      .flip-card-back .card-desc { font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Live region for screen reader announcements -->
+  <div id="sr-live" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Progress Bar -->
+  <nav class="progress-bar" aria-label="Activity progress">
+    <span class="progress-label" id="progress-label">Step 1 of 3</span>
+    <ol class="progress-dots" aria-label="Steps">
+      <li class="active" aria-label="Step 1: current" id="dot-1"></li>
+      <li aria-label="Step 2: not started" id="dot-2"></li>
+      <li aria-label="Step 3: not started" id="dot-3"></li>
+    </ol>
+  </nav>
+
+  <div class="activity-wrapper">
+
+    <!-- ==============================
+         SCREEN 1: Flashcards
+    ============================== -->
+    <section class="screen visible" id="screen-1" aria-labelledby="s1-heading">
+      <h2 class="step-heading" id="s1-heading">Step 1: Learn the Causes</h2>
+      <p class="step-intro">
+        Before you can analyze the causes of the Great Depression, you need to know what they actually were.
+        Below are ten cards — each one names a major cause. Click or tap any card to flip it and read a brief description.
+        Take your time with each one before moving on. You'll be working with all ten of these in the next two steps.
+      </p>
+
+      <p class="flashcard-counter" aria-live="polite" id="flip-counter">You've explored 0 of 10 causes</p>
+
+      <div class="flashcard-grid" id="flashcard-grid" role="list" aria-label="Cause flashcards"></div>
+
+      <div class="step1-actions">
+        <button class="btn btn-primary" id="btn-to-step2" disabled aria-disabled="true">
+          Continue to Step 2
+        </button>
+        <span id="s1-hint" style="font-size:0.9rem;color:#555;font-style:italic;">Flip all 10 cards to continue.</span>
+      </div>
+    </section>
+
+    <!-- ==============================
+         SCREEN 2: Chronological Order
+    ============================== -->
+    <section class="screen" id="screen-2" aria-labelledby="s2-heading">
+      <h2 class="step-heading" id="s2-heading">Step 2: Put the Causes in Order</h2>
+      <p class="step-intro">
+        Now that you know what each cause was, think about when it happened. Drag the cards below into the order you
+        think they occurred — from earliest to most recent. Some of these causes were ongoing conditions that stretched
+        across years, so there's no single perfect answer. Do your best to sequence them, then submit to see how
+        historians typically think about the timeline.
+      </p>
+
+      <div class="order-instructions" role="note">
+        <strong>Why does order matter?</strong> In historical thinking, sequence is one of our most important clues
+        about causation. Events that happened <em>before</em> a crisis are more likely to be prior vulnerabilities.
+        Events that happened <em>at the same time</em> as the crisis are more likely to be triggers or early aftershocks.
+        Events that <em>deepened or prolonged</em> the crisis afterward are extending vulnerabilities. The order you
+        establish here will help you in Step 3.
+      </div>
+
+      <p style="font-size:0.9rem;color:#555;margin-bottom:12px;">
+        <strong>Tip:</strong> Drag cards to reorder, or use the ▲ ▼ buttons on each card. Hover or focus a card to see its description.
+      </p>
+
+      <ul class="sortable-list" id="sortable-list" aria-label="Ordered causes list — drag to reorder"></ul>
+
+      <div class="step2-actions">
+        <button class="btn btn-primary" id="btn-submit-order">Submit My Order</button>
+      </div>
+
+      <!-- Feedback box (hidden until submit) -->
+      <div class="feedback-box hidden" id="order-feedback" role="region" aria-label="Timeline feedback" tabindex="-1">
+        <h3>How historians think about the timeline</h3>
+        <p>
+          There's no single correct answer here — several of these causes overlapped with each other across years or even decades.
+          But historians generally think about the causes of the Great Depression in three broad eras:
+        </p>
+
+        <div style="margin:20px 0;">
+          <h3 class="era-heading">The 1910s and early 1920s — laying the groundwork</h3>
+          <p style="margin:4px 0 10px;">These conditions were already weakening the system long before the crash.</p>
+          <div class="era-chips">
+            <span class="era-chip">World War I and Its Economic Aftermath</span>
+            <span class="era-chip">Wealth Inequality</span>
+            <span class="era-chip">Lack of Banking Regulations</span>
+          </div>
+        </div>
+
+        <div style="margin:20px 0;">
+          <h3 class="era-heading">The mid-to-late 1920s — the bubble builds</h3>
+          <p style="margin:4px 0 10px;">Prosperity on the surface, fragility underneath — these forces built the bubble that would eventually burst.</p>
+          <div class="era-chips">
+            <span class="era-chip">Speculation, Easy Credit, and Buying on Margin</span>
+            <span class="era-chip">The Federal Reserve and the Gold Standard</span>
+          </div>
+        </div>
+
+        <div style="margin:20px 0;">
+          <h3 class="era-heading">1929 — the trigger</h3>
+          <p style="margin:4px 0 10px;">The match that lit the fuse.</p>
+          <div class="era-chips">
+            <span class="era-chip">The Stock Market Crash of 1929</span>
+          </div>
+        </div>
+
+        <div style="margin:20px 0;">
+          <h3 class="era-heading">1929–1933 — the cascade</h3>
+          <p style="margin:4px 0 10px;">The crash set off a chain of aftershocks that deepened and prolonged the crisis.</p>
+          <div class="era-chips">
+            <span class="era-chip">Financial Panic and Economic Psychology</span>
+            <span class="era-chip">Bank Runs</span>
+            <span class="era-chip">The Deflationary Spiral</span>
+            <span class="era-chip">The Dust Bowl</span>
+          </div>
+        </div>
+
+        <p>
+          Notice how your ordering lines up with these eras. Where did you place the causes that span multiple
+          periods, like wealth inequality or the Federal Reserve? Those are the hardest to sequence — and that
+          difficulty is itself historically meaningful. Some vulnerabilities don't have a start date. They're just
+          always there, squeezing.
+        </p>
+
+        <div style="margin-top:20px;">
+          <button class="btn btn-primary" id="btn-to-step3">Continue to Step 3</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+         SCREEN 3: Category Sorting
+    ============================== -->
+    <section class="screen" id="screen-3" aria-labelledby="s3-heading">
+      <h2 class="step-heading" id="s3-heading">Step 3: Classify the Causes</h2>
+      <p class="step-intro">
+        You've learned what each cause was and thought about when it happened. Now comes the historical thinking payoff:
+        classifying each cause using the framework from your reading.
+      </p>
+      <p class="step-intro" style="margin-bottom:6px;">Recall the three categories:</p>
+      <ul style="margin-bottom:22px;padding-left:22px;font-size:1rem;line-height:1.8;">
+        <li><strong>Prior Vulnerabilities</strong> — Existing conditions or events that occurred before the trigger. Weaknesses already present in the system.</li>
+        <li><strong>Trigger Events</strong> — The event(s) that set off the cascade. The final rubber band.</li>
+        <li><strong>Extending Vulnerabilities (Aftershocks)</strong> — Existing weaknesses made worse by the trigger, or new conditions created by it, that prolonged and deepened the crisis.</li>
+      </ul>
+      <p class="step-intro">
+        Drag each cause card into the column where you think it best fits. Some causes could reasonably belong in
+        more than one category — use your best judgment and be ready to explain your thinking. When you're done,
+        submit to see how historians typically classify these causes.
+      </p>
+      <p style="font-size:0.9rem;color:#555;margin-bottom:14px;">
+        <strong>Tip:</strong> You can drag cards, or click/tap a card to select it, then click/tap the column where you want it to go.
+      </p>
+
+      <div class="unsorted-pool" id="unsorted-pool" role="region" aria-label="Unsorted cause cards — drag into a category column" aria-dropeffect="move"></div>
+
+      <div class="sort-columns" role="list" aria-label="Category columns">
+
+        <div class="sort-column col-prior" role="listitem">
+          <div class="col-header prior">
+            <h3>Prior Vulnerabilities</h3>
+            <div class="col-def">Weaknesses already present before the trigger</div>
+            <div class="col-count" id="count-prior" aria-live="polite">0 cards</div>
+          </div>
+          <div class="col-drop-zone" id="col-prior" data-col="prior" role="region" aria-label="Prior Vulnerabilities column" aria-dropeffect="move">
+            <button class="col-tap-btn" data-col="prior" aria-label="Place selected card here: Prior Vulnerabilities">Place card here</button>
+          </div>
+        </div>
+
+        <div class="sort-column col-trigger" role="listitem">
+          <div class="col-header trigger">
+            <h3>Trigger Events</h3>
+            <div class="col-def">The event(s) that set off the cascade</div>
+            <div class="col-count" id="count-trigger" aria-live="polite">0 cards</div>
+          </div>
+          <div class="col-drop-zone" id="col-trigger" data-col="trigger" role="region" aria-label="Trigger Events column" aria-dropeffect="move">
+            <button class="col-tap-btn" data-col="trigger" aria-label="Place selected card here: Trigger Events">Place card here</button>
+          </div>
+        </div>
+
+        <div class="sort-column col-extending" role="listitem">
+          <div class="col-header extending">
+            <h3>Extending Vulnerabilities</h3>
+            <div class="col-def">Conditions that prolonged and deepened the crisis</div>
+            <div class="col-count" id="count-extending" aria-live="polite">0 cards</div>
+          </div>
+          <div class="col-drop-zone" id="col-extending" data-col="extending" role="region" aria-label="Extending Vulnerabilities column" aria-dropeffect="move">
+            <button class="col-tap-btn" data-col="extending" aria-label="Place selected card here: Extending Vulnerabilities">Place card here</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="step3-actions">
+        <button class="btn btn-primary" id="btn-submit-sort" disabled aria-disabled="true">Submit My Classification</button>
+        <span id="s3-hint" style="font-size:0.9rem;color:#555;font-style:italic;">Sort all 10 cards to submit.</span>
+      </div>
+
+      <!-- Step 3 Feedback -->
+      <div class="feedback-box hidden" id="sort-feedback" role="region" aria-label="Classification feedback" tabindex="-1">
+        <h3>One way historians classify these causes</h3>
+        <p>
+          Your classifications don't have to match this exactly — several of these causes are genuinely debatable,
+          and historians do disagree. What matters is that you can defend your reasoning. Here's one well-supported
+          way to sort them:
+        </p>
+
+        <div class="classification-grid">
+          <div class="class-column">
+            <div class="class-column-header prior">Prior Vulnerabilities</div>
+            <div class="class-column-body">
+              <ul>
+                <li>World War I and its economic aftermath</li>
+                <li>Wealth Inequality</li>
+                <li>Lack of Banking Regulations</li>
+                <li>Speculation, Easy Credit, and Buying on Margin</li>
+                <li>The Federal Reserve and the Gold Standard</li>
+              </ul>
+            </div>
+          </div>
+          <div class="class-column">
+            <div class="class-column-header trigger">Trigger Events</div>
+            <div class="class-column-body">
+              <ul>
+                <li>The Stock Market Crash of 1929</li>
+              </ul>
+            </div>
+          </div>
+          <div class="class-column">
+            <div class="class-column-header extending">Extending Vulnerabilities</div>
+            <div class="class-column-body">
+              <ul>
+                <li>Financial Panic and Economic Psychology</li>
+                <li>Bank Runs</li>
+                <li>The Deflationary Spiral</li>
+                <li>The Dust Bowl</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(139,105,20,0.1);border-left:4px solid var(--sepia);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin-top:4px;">
+          <strong>A note on contested placements:</strong> Some of these could reasonably be placed in more than one category.
+          Bank runs, for example, could be seen as a trigger (they caused banks to close) or an extending vulnerability
+          (they were triggered by the crash). The Dust Bowl could be a prior vulnerability (overfarmed land was already depleted)
+          and an extending vulnerability (the drought hit after the crash). Financial panic exists in both the trigger and
+          aftershock categories depending on which moment you're looking at. This ambiguity isn't a problem — it's what
+          makes historical causation interesting. Real events don't sort neatly into boxes.
+        </div>
+
+        <div style="margin-top:20px;">
+          <button class="btn btn-primary" id="btn-to-completion">See Your Results</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+         SCREEN 4: Completion
+    ============================== -->
+    <section class="screen" id="screen-4" aria-labelledby="s4-heading">
+      <div class="completion-hero">
+        <h2 id="s4-heading">Nice work.</h2>
+        <p>
+          You've done something historians do all the time: taken a complex event, broken it into its component causes,
+          and thought carefully about how those causes relate to each other in time and in type. The Great Depression
+          wasn't caused by one bad decision or one unlucky event. It was the result of decades of structural vulnerabilities,
+          a triggering shock, and a cascade of aftershocks that no one fully anticipated.
+        </p>
+        <p>
+          Keep this framework in mind as you move through the rest of the course and as you think about historical events. When you encounter Hoover's response to the Depression, or the New Deal programs that followed, ask yourself: is this a prior vulnerability, a trigger, or an aftershock?
+        </p>
+      </div>
+
+      <!-- Review collapsible -->
+      <div class="review-section" aria-label="Review your classifications">
+        <button class="review-toggle" id="review-toggle" aria-expanded="false" aria-controls="review-content">
+          Review Your Classifications
+          <span class="toggle-icon" aria-hidden="true">▼</span>
+        </button>
+        <div class="review-content" id="review-content" role="region" aria-label="Your classifications compared to suggested">
+          <div class="review-compare-grid">
+            <div class="review-col">
+              <h4>Your Classification</h4>
+              <div id="review-yours"></div>
+            </div>
+            <div class="review-col">
+              <h4>Suggested Classification</h4>
+              <div id="review-suggested">
+                <div class="review-group">
+                  <div class="review-label">Prior Vulnerabilities</div>
+                  <span class="review-chip prior-chip">World War I &amp; Aftermath</span>
+                  <span class="review-chip prior-chip">Wealth Inequality</span>
+                  <span class="review-chip prior-chip">Lack of Banking Regulations</span>
+                  <span class="review-chip prior-chip">Speculation &amp; Easy Credit</span>
+                  <span class="review-chip prior-chip">Federal Reserve &amp; Gold Standard</span>
+                </div>
+                <div class="review-group">
+                  <div class="review-label">Trigger Events</div>
+                  <span class="review-chip trigger-chip">Stock Market Crash of 1929</span>
+                </div>
+                <div class="review-group">
+                  <div class="review-label">Extending Vulnerabilities</div>
+                  <span class="review-chip extending-chip">Financial Panic</span>
+                  <span class="review-chip extending-chip">Bank Runs</span>
+                  <span class="review-chip extending-chip">Deflationary Spiral</span>
+                  <span class="review-chip extending-chip">The Dust Bowl</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:40px;">
+        <a href="index.html" class="btn btn-return">Return to Course</a>
+      </div>
+    </section>
+
+  </div><!-- /activity-wrapper -->
+
+  <script>
+  (() => {
+    'use strict';
+
+    // ==============================
+    // Data
+    // ==============================
+    const CAUSES = [
+      {
+        id: 'wealth-inequality',
+        front: 'Wealth Inequality',
+        back: 'Throughout the 1920s, the gap between rich and poor in America was enormous. Many workers did not earn enough to save anything — so when they were laid off, they had nothing to fall back on. Poor Americans also couldn\'t afford to invest in the stock market, meaning they had no stake in the boom but suffered all the consequences of the bust. When the crisis hit, the wealthy could rely on gold or stable assets; working-class Americans had nowhere to turn.'
+      },
+      {
+        id: 'speculation',
+        front: 'Speculation, Easy Credit, and Buying on Margin',
+        back: 'Investors took out loans from banks to purchase stocks, betting that prices would keep rising. When the market crashed, they lost money and couldn\'t repay those loans. Meanwhile, the Federal Reserve\'s low interest rates made it easy for middle-class Americans to live beyond their means — borrowing to buy larger homes and luxury goods. Businesses ramped up production to meet this demand, creating a bubble built on debt rather than real wealth.'
+      },
+      {
+        id: 'banking-regulations',
+        front: 'Lack of Banking Regulations',
+        back: 'In the 1920s, banks operated with almost no rules. They invested their customers\' deposits in speculative ventures — real estate, stocks, risky business loans — without their customers\' knowledge or consent. When those investments failed, the banks had no cushion. During the worst years of the Depression, roughly one third of American banks closed, and customers who had money deposited in those banks lost everything.'
+      },
+      {
+        id: 'deflationary-spiral',
+        front: 'The Deflationary Spiral',
+        back: 'When businesses began closing or laying off workers, those workers could no longer spend money on goods and services. That caused more businesses to fail, which caused more unemployment, which caused even less spending — a self-reinforcing cycle of economic contraction. Businesses and individuals also couldn\'t repay their loans or mortgages, which put further pressure on already-fragile banks.'
+      },
+      {
+        id: 'federal-reserve',
+        front: 'The Federal Reserve and the Gold Standard',
+        back: 'Created in 1913, the Federal Reserve was meant to regulate the money supply and set interest rates. In the 1920s, with few regulations guiding it, the Fed flooded the market with money and kept interest rates low — encouraging borrowing and speculation. Then, in 1929, it abruptly reversed course: it raised interest rates sharply and restricted the money supply, helping to trigger the very crisis it was supposed to prevent. The Gold Standard limited the government\'s ability to respond flexibly once the crisis began.'
+      },
+      {
+        id: 'financial-panic',
+        front: 'Financial Panic and Economic Psychology',
+        back: 'Much of what made the Depression so severe was psychological. When the Federal Reserve reversed its policies and the stock market crashed, public confidence collapsed. People saw rising unemployment and rushed to withdraw their savings before banks shut down. That panic became a self-fulfilling prophecy: news of one bank run triggered waves of other bank runs, as people desperately tried to get their money out before it was too late.'
+      },
+      {
+        id: 'bank-runs',
+        front: 'Bank Runs',
+        back: 'When customers and businesses couldn\'t repay their loans, banks couldn\'t stay solvent. Rumors of a bank closing — or a bank calling in its loans — would send hundreds or thousands of customers to line up and demand their cash. But banks only kept a fraction of their deposits as physical cash on hand. Unable to meet the demand, they were forced to close or suspend withdrawals entirely, wiping out the savings of everyone who hadn\'t gotten there in time.'
+      },
+      {
+        id: 'wwi',
+        front: 'World War I and Its Economic Aftermath',
+        back: 'World War I left European economies in ruins. The Allied nations had borrowed enormous sums from American banks to finance the war and struggled to repay those debts. The defeated Axis powers were ordered to pay massive war reparations they couldn\'t afford. All of this put sustained pressure on American banks and the global economy throughout the 1920s — a slow leak that weakened the system long before the crash.'
+      },
+      {
+        id: 'stock-crash',
+        front: 'The Stock Market Crash of 1929',
+        back: 'On October 24, 1929 — "Black Thursday" — share prices began falling sharply. Too many investors were selling and not enough were buying, sending prices into freefall. Investors found themselves holding shares worth far less than they had paid, with no buyers in sight. Businesses lost access to capital almost overnight and began laying off workers in massive numbers. The crash didn\'t cause the Depression on its own — but it was the trigger that set off everything that followed.'
+      },
+      {
+        id: 'dust-bowl',
+        front: 'The Dust Bowl',
+        back: 'Farmers across the Great Plains had taken out loans to buy land and equipment. When banks — desperate to stay afloat — called in those loans and farmers couldn\'t pay, their farms were foreclosed. Then a massive drought struck Texas, Oklahoma, Kansas, and Arkansas in the early 1930s. Fields that had been overworked for decades turned to dust, whipped into enormous storms by Great Plains winds. The Dust Bowl deepened rural poverty, displaced hundreds of thousands of families, and added an environmental catastrophe on top of an economic one.'
+      }
+    ];
+
+    // ==============================
+    // State
+    // ==============================
+    let flippedCount = 0;
+    let step2Order = [...CAUSES]; // will be shuffled
+    let step3Placements = {}; // id -> 'prior'|'trigger'|'extending'
+    let selectedChipId = null; // for tap-to-select in step 3
+
+    // ==============================
+    // Utility
+    // ==============================
+    function announce(msg) {
+      const el = document.getElementById('sr-live');
+      el.textContent = '';
+      requestAnimationFrame(() => { el.textContent = msg; });
+    }
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function updateProgress(step) {
+      const label = document.getElementById('progress-label');
+      const dots = document.querySelectorAll('.progress-dots li');
+      if (step <= 3) {
+        label.textContent = `Step ${step} of 3`;
+      } else {
+        label.textContent = 'Complete!';
+      }
+      dots.forEach((dot, i) => {
+        dot.classList.remove('active', 'done');
+        dot.removeAttribute('tabindex');
+        dot.onclick = null;
+        dot.onkeydown = null;
+        if (i + 1 < step) {
+          dot.classList.add('done');
+          dot.setAttribute('aria-label', `Step ${i+1}: complete — click to go back`);
+          dot.setAttribute('tabindex', '0');
+          dot.onclick = () => { updateProgress(i + 1); showScreen(`screen-${i + 1}`); };
+          dot.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dot.onclick(); } };
+        } else if (i + 1 === step && step <= 3) {
+          dot.classList.add('active');
+          dot.setAttribute('aria-label', `Step ${i+1}: current`);
+        } else {
+          dot.setAttribute('aria-label', `Step ${i+1}: not started`);
+        }
+      });
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('visible');
+        s.style.display = 'none';
+      });
+      const screen = document.getElementById(id);
+      screen.style.display = 'block';
+      // Force reflow for animation
+      requestAnimationFrame(() => {
+        screen.classList.add('visible');
+        // Focus heading
+        const heading = screen.querySelector('h2');
+        if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus(); }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // ==============================
+    // STEP 1: Flashcards
+    // ==============================
+    function buildFlashcards() {
+      const grid = document.getElementById('flashcard-grid');
+      grid.innerHTML = '';
+      CAUSES.forEach((cause, idx) => {
+        const card = document.createElement('div');
+        card.className = 'flip-card';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `Card ${idx+1}: ${cause.front} — click to flip`);
+        card.setAttribute('aria-pressed', 'false');
+        card.dataset.id = cause.id;
+        card.innerHTML = `
+          <div class="flip-card-inner" aria-hidden="true">
+            <div class="flip-card-front">
+              <div class="card-title">${cause.front}</div>
+              <div class="flip-hint">Click to flip</div>
+            </div>
+            <div class="flip-card-back">
+              <div class="card-title-small">${cause.front}</div>
+              <div class="card-desc">${cause.back}</div>
+            </div>
+          </div>
+        `;
+
+        function flipCard() {
+          const wasFlipped = card.classList.contains('flipped');
+          card.classList.toggle('flipped');
+          if (!wasFlipped) {
+            card.classList.add('explored');
+            card.setAttribute('aria-pressed', 'true');
+            card.setAttribute('aria-label', `Card ${idx+1}: ${cause.front} — flipped. ${cause.back}`);
+            flippedCount++;
+            updateFlipCounter();
+            announce(`${cause.front} flipped. ${flippedCount} of 10 explored.`);
+          } else {
+            card.setAttribute('aria-pressed', 'false');
+            card.setAttribute('aria-label', `Card ${idx+1}: ${cause.front} — click to flip`);
+          }
+        }
+
+        card.addEventListener('click', flipCard);
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipCard(); }
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    function updateFlipCounter() {
+      document.getElementById('flip-counter').textContent = `You've explored ${flippedCount} of 10 causes`;
+      if (flippedCount >= 10) {
+        const btn = document.getElementById('btn-to-step2');
+        btn.disabled = false;
+        btn.removeAttribute('aria-disabled');
+        document.getElementById('s1-hint').textContent = 'You\'ve seen all the causes — ready to continue!';
+        announce('All 10 causes explored. You can now continue to Step 2.');
+      }
+    }
+
+    document.getElementById('btn-to-step2').addEventListener('click', () => {
+      buildStep2();
+      showScreen('screen-2');
+      updateProgress(2);
+    });
+
+    // ==============================
+    // STEP 2: Chronological Ordering
+    // ==============================
+    let dragSrcIndex = null;
+
+    function buildStep2() {
+      step2Order = shuffle(CAUSES);
+      renderSortableList();
+    }
+
+    function renderSortableList() {
+      const list = document.getElementById('sortable-list');
+      list.innerHTML = '';
+      step2Order.forEach((cause, idx) => {
+        const li = document.createElement('li');
+        li.className = 'order-card';
+        li.draggable = true;
+        li.tabIndex = 0;
+        li.dataset.id = cause.id;
+        li.dataset.index = idx;
+        li.setAttribute('aria-label', `${idx+1}. ${cause.front} — use arrow buttons or drag to reorder`);
+        li.innerHTML = `
+          <span class="card-rank">${idx + 1}.</span>
+          <span class="card-name tooltip-trigger" title="Click to read description">${cause.front} <span class="tooltip-hint">ⓘ</span></span>
+          <span class="tooltip" role="tooltip">${cause.back}</span>
+          <div class="card-move-btns">
+            <button class="btn-move" data-dir="up" aria-label="Move ${cause.front} earlier" ${idx === 0 ? 'disabled' : ''}>▲</button>
+            <button class="btn-move" data-dir="down" aria-label="Move ${cause.front} later" ${idx === step2Order.length - 1 ? 'disabled' : ''}>▼</button>
+          </div>
+        `;
+
+        // Drag events
+        li.addEventListener('dragstart', e => {
+          dragSrcIndex = idx;
+          li.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', idx);
+        });
+        li.addEventListener('dragend', () => li.classList.remove('dragging'));
+        li.addEventListener('dragover', e => {
+          e.preventDefault();
+          li.classList.add('drag-over');
+        });
+        li.addEventListener('dragleave', () => li.classList.remove('drag-over'));
+        li.addEventListener('drop', e => {
+          e.preventDefault();
+          li.classList.remove('drag-over');
+          if (dragSrcIndex !== null && dragSrcIndex !== idx) {
+            const moved = step2Order.splice(dragSrcIndex, 1)[0];
+            step2Order.splice(idx, 0, moved);
+            renderSortableList();
+            announce(`${moved.front} moved to position ${idx + 1}.`);
+          }
+          dragSrcIndex = null;
+        });
+
+        // Tooltip toggle on card name click
+        li.querySelector('.tooltip-trigger').addEventListener('click', e => {
+          e.stopPropagation();
+          const isOpen = li.classList.contains('tooltip-open');
+          // Close all others first
+          document.querySelectorAll('.order-card.tooltip-open').forEach(c => c.classList.remove('tooltip-open'));
+          if (!isOpen) {
+            li.classList.add('tooltip-open');
+            announce(`${cause.front}: ${cause.back}`);
+          }
+        });
+
+        // Move buttons
+        li.querySelectorAll('.btn-move').forEach(btn => {
+          btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const dir = btn.dataset.dir;
+            if (dir === 'up' && idx > 0) {
+              [step2Order[idx - 1], step2Order[idx]] = [step2Order[idx], step2Order[idx - 1]];
+              renderSortableList();
+              // Refocus moved card
+              const cards = document.querySelectorAll('.order-card');
+              const targetCard = cards[idx - 1];
+              if (targetCard) targetCard.focus();
+              announce(`${cause.front} moved to position ${idx}.`);
+            } else if (dir === 'down' && idx < step2Order.length - 1) {
+              [step2Order[idx], step2Order[idx + 1]] = [step2Order[idx + 1], step2Order[idx]];
+              renderSortableList();
+              const cards = document.querySelectorAll('.order-card');
+              const targetCard = cards[idx + 1];
+              if (targetCard) targetCard.focus();
+              announce(`${cause.front} moved to position ${idx + 2}.`);
+            }
+          });
+        });
+
+        // Keyboard: arrow keys on card body
+        li.addEventListener('keydown', e => {
+          if (e.target !== li) return;
+          if (e.key === 'ArrowUp' && idx > 0) {
+            e.preventDefault();
+            [step2Order[idx - 1], step2Order[idx]] = [step2Order[idx], step2Order[idx - 1]];
+            renderSortableList();
+            document.querySelectorAll('.order-card')[idx - 1]?.focus();
+            announce(`${cause.front} moved to position ${idx}.`);
+          } else if (e.key === 'ArrowDown' && idx < step2Order.length - 1) {
+            e.preventDefault();
+            [step2Order[idx], step2Order[idx + 1]] = [step2Order[idx + 1], step2Order[idx]];
+            renderSortableList();
+            document.querySelectorAll('.order-card')[idx + 1]?.focus();
+            announce(`${cause.front} moved to position ${idx + 2}.`);
+          }
+        });
+
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById('btn-submit-order').addEventListener('click', () => {
+      const feedback = document.getElementById('order-feedback');
+      feedback.classList.remove('hidden');
+      feedback.focus();
+      document.getElementById('btn-submit-order').disabled = true;
+      announce('Feedback shown. Read the historian\'s timeline analysis below.');
+    });
+
+    document.getElementById('btn-to-step3').addEventListener('click', () => {
+      buildStep3();
+      showScreen('screen-3');
+      updateProgress(3);
+    });
+
+    // ==============================
+    // STEP 3: Category Sorting
+    // ==============================
+    let dragChipId = null;
+
+    function buildStep3() {
+      step3Placements = {};
+      selectedChipId = null;
+
+      // Reset columns
+      ['prior', 'trigger', 'extending'].forEach(col => {
+        const zone = document.getElementById(`col-${col}`);
+        // Keep only the tap button
+        const tapBtn = zone.querySelector('.col-tap-btn');
+        zone.innerHTML = '';
+        zone.appendChild(tapBtn);
+        updateColCount(col);
+      });
+
+      const pool = document.getElementById('unsorted-pool');
+      pool.innerHTML = '';
+
+      // Render all chips into pool in randomized order
+      shuffle(CAUSES).forEach(cause => {
+        pool.appendChild(makeChip(cause, 'pool'));
+      });
+
+      updateSubmitBtn();
+    }
+
+    function makeChip(cause, location) {
+      const wrap = document.createElement('div');
+      wrap.className = 'chip-in-pool';
+
+      const chip = document.createElement('div');
+      chip.className = 'sort-chip';
+      chip.draggable = true;
+      chip.tabIndex = 0;
+      chip.dataset.id = cause.id;
+      chip.setAttribute('role', 'button');
+      chip.setAttribute('aria-label', `${cause.front} — drag or click to classify`);
+
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = cause.front;
+      chip.appendChild(nameSpan);
+
+      // Remove button (only shown when in a column)
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'chip-remove-btn';
+      removeBtn.setAttribute('aria-label', `Remove ${cause.front} from category`);
+      removeBtn.textContent = '×';
+      removeBtn.style.display = location === 'pool' ? 'none' : 'flex';
+      chip.appendChild(removeBtn);
+
+      removeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        const oldCol = step3Placements[cause.id];
+        delete step3Placements[cause.id];
+        if (selectedChipId === cause.id) selectedChipId = null;
+        updateColCount(oldCol);
+        updateSubmitBtn();
+        // Move chip back to pool
+        const pool = document.getElementById('unsorted-pool');
+        chip.querySelector('.chip-remove-btn').style.display = 'none';
+        chip.classList.remove('selected-for-move');
+        pool.appendChild(wrap);
+        announce(`${cause.front} removed from ${oldCol} and returned to unsorted pool.`);
+      });
+
+      // Drag
+      chip.addEventListener('dragstart', e => {
+        dragChipId = cause.id;
+        chip.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', cause.id);
+        selectedChipId = null;
+        clearChipSelections();
+      });
+      chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
+
+      // Tap-to-select
+      chip.addEventListener('click', e => {
+        if (e.target === removeBtn) return;
+        if (selectedChipId === cause.id) {
+          // Deselect
+          selectedChipId = null;
+          chip.classList.remove('selected-for-move');
+          chip.setAttribute('aria-pressed', 'false');
+          hideTapBtns();
+          announce(`${cause.front} deselected.`);
+        } else {
+          clearChipSelections();
+          selectedChipId = cause.id;
+          chip.classList.add('selected-for-move');
+          chip.setAttribute('aria-pressed', 'true');
+          showTapBtns();
+          announce(`${cause.front} selected. Now tap a category column to place it.`);
+        }
+      });
+
+      chip.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          chip.click();
+        }
+      });
+
+      wrap.appendChild(chip);
+      return wrap;
+    }
+
+    function clearChipSelections() {
+      document.querySelectorAll('.sort-chip.selected-for-move').forEach(c => {
+        c.classList.remove('selected-for-move');
+        c.setAttribute('aria-pressed', 'false');
+      });
+    }
+
+    function showTapBtns() {
+      document.querySelectorAll('.col-tap-btn').forEach(b => b.classList.add('show'));
+    }
+
+    function hideTapBtns() {
+      document.querySelectorAll('.col-tap-btn').forEach(b => b.classList.remove('show'));
+    }
+
+    function placeChipInColumn(causeId, colId) {
+      const cause = CAUSES.find(c => c.id === causeId);
+      if (!cause) return;
+
+      // Remove from wherever it currently is
+      const oldCol = step3Placements[causeId];
+      if (oldCol) updateColCount(oldCol);
+
+      step3Placements[causeId] = colId;
+
+      // Find the chip element
+      const chip = document.querySelector(`.sort-chip[data-id="${causeId}"]`);
+      if (!chip) return;
+      const wrap = chip.parentElement;
+      const removeBtn = chip.querySelector('.chip-remove-btn');
+      if (removeBtn) removeBtn.style.display = 'flex';
+      chip.classList.remove('selected-for-move');
+      chip.setAttribute('aria-pressed', 'false');
+
+      // Append to column
+      const zone = document.getElementById(`col-${colId}`);
+      const tapBtn = zone.querySelector('.col-tap-btn');
+      zone.insertBefore(wrap, tapBtn);
+
+      updateColCount(colId);
+      updateSubmitBtn();
+      hideTapBtns();
+      selectedChipId = null;
+
+      const colLabels = { prior: 'Prior Vulnerabilities', trigger: 'Trigger Events', extending: 'Extending Vulnerabilities' };
+      announce(`${cause.front} placed in ${colLabels[colId]}.`);
+    }
+
+    function updateColCount(col) {
+      if (!col) return;
+      const count = Object.values(step3Placements).filter(v => v === col).length;
+      document.getElementById(`count-${col}`).textContent = `${count} card${count !== 1 ? 's' : ''}`;
+    }
+
+    function updateSubmitBtn() {
+      const placed = Object.keys(step3Placements).length;
+      const btn = document.getElementById('btn-submit-sort');
+      const hint = document.getElementById('s3-hint');
+      if (placed >= 10) {
+        btn.disabled = false;
+        btn.removeAttribute('aria-disabled');
+        hint.textContent = 'All cards placed — ready to submit!';
+      } else {
+        btn.disabled = true;
+        btn.setAttribute('aria-disabled', 'true');
+        hint.textContent = `${10 - placed} card${10 - placed !== 1 ? 's' : ''} remaining.`;
+      }
+    }
+
+    // Drop zones
+    function setupDropZone(zone) {
+      zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('drag-target');
+        e.dataTransfer.dropEffect = 'move';
+      });
+      zone.addEventListener('dragleave', () => zone.classList.remove('drag-target'));
+      zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('drag-target');
+        const chipId = e.dataTransfer.getData('text/plain') || dragChipId;
+        if (chipId) placeChipInColumn(chipId, zone.dataset.col);
+        dragChipId = null;
+      });
+    }
+
+    // Pool as drop zone (return cards)
+    const poolEl = document.getElementById('unsorted-pool');
+    poolEl.addEventListener('dragover', e => {
+      e.preventDefault();
+      poolEl.classList.add('drag-target');
+    });
+    poolEl.addEventListener('dragleave', () => poolEl.classList.remove('drag-target'));
+    poolEl.addEventListener('drop', e => {
+      e.preventDefault();
+      poolEl.classList.remove('drag-target');
+      const chipId = e.dataTransfer.getData('text/plain') || dragChipId;
+      if (!chipId) return;
+      const oldCol = step3Placements[chipId];
+      if (!oldCol) return; // already in pool
+      const cause = CAUSES.find(c => c.id === chipId);
+      delete step3Placements[chipId];
+      updateColCount(oldCol);
+      updateSubmitBtn();
+      const chip = document.querySelector(`.sort-chip[data-id="${chipId}"]`);
+      if (chip) {
+        const removeBtn = chip.querySelector('.chip-remove-btn');
+        if (removeBtn) removeBtn.style.display = 'none';
+        poolEl.appendChild(chip.parentElement);
+        announce(`${cause ? cause.front : chipId} returned to unsorted pool.`);
+      }
+      dragChipId = null;
+    });
+
+    // Tap buttons in columns
+    document.querySelectorAll('.col-tap-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (selectedChipId) placeChipInColumn(selectedChipId, btn.dataset.col);
+      });
+    });
+
+    document.getElementById('btn-submit-sort').addEventListener('click', () => {
+      const feedback = document.getElementById('sort-feedback');
+      feedback.classList.remove('hidden');
+      feedback.focus();
+      document.getElementById('btn-submit-sort').disabled = true;
+      announce('Classification submitted. Feedback is now shown below.');
+    });
+
+    document.getElementById('btn-to-completion').addEventListener('click', () => {
+      buildCompletionScreen();
+      showScreen('screen-4');
+      updateProgress(4);
+    });
+
+    // ==============================
+    // STEP 4: Completion / Review
+    // ==============================
+    function buildCompletionScreen() {
+      const colLabels = {
+        prior: 'Prior Vulnerabilities',
+        trigger: 'Trigger Events',
+        extending: 'Extending Vulnerabilities'
+      };
+      const chipClasses = { prior: 'prior-chip', trigger: 'trigger-chip', extending: 'extending-chip' };
+
+      // Group student placements
+      const groups = { prior: [], trigger: [], extending: [] };
+      Object.entries(step3Placements).forEach(([id, col]) => {
+        const cause = CAUSES.find(c => c.id === id);
+        if (cause && groups[col]) groups[col].push(cause.front);
+      });
+
+      const container = document.getElementById('review-yours');
+      container.innerHTML = '';
+
+      ['prior', 'trigger', 'extending'].forEach(col => {
+        const group = document.createElement('div');
+        group.className = 'review-group';
+        const label = document.createElement('div');
+        label.className = 'review-label';
+        label.textContent = colLabels[col];
+        group.appendChild(label);
+
+        if (groups[col].length === 0) {
+          const empty = document.createElement('em');
+          empty.style.fontSize = '0.85rem';
+          empty.style.color = '#777';
+          empty.textContent = 'None placed here';
+          group.appendChild(empty);
+        } else {
+          groups[col].forEach(name => {
+            const chip = document.createElement('span');
+            chip.className = `review-chip ${chipClasses[col]}`;
+            chip.textContent = name;
+            group.appendChild(chip);
+          });
+        }
+
+        container.appendChild(group);
+      });
+    }
+
+    // Review toggle
+    document.getElementById('review-toggle').addEventListener('click', function() {
+      const content = document.getElementById('review-content');
+      const isOpen = content.classList.toggle('open');
+      this.classList.toggle('open', isOpen);
+      this.setAttribute('aria-expanded', isOpen);
+    });
+
+    // ==============================
+    // Drop zone setup (Step 3)
+    // ==============================
+    ['col-prior', 'col-trigger', 'col-extending'].forEach(id => {
+      const zone = document.getElementById(id);
+      if (zone) setupDropZone(zone);
+    });
+
+    // ==============================
+    // Init
+    // ==============================
+    buildFlashcards();
+    updateProgress(1);
+
+    // Hide screens except first
+    document.querySelectorAll('.screen:not(#screen-1)').forEach(s => {
+      s.style.display = 'none';
+    });
+
+  })();
+  </script>
+</body>
+</html>
