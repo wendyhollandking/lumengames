@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Significance Scale — 1960s Events</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1c1917;
+    --paper: #f5f0e8;
+    --warm-white: #faf8f4;
+    --rust: #b84c2a;
+    --rust-dark: #8f3a1e;
+    --gold: #c4922a;
+    --slate: #44403c;
+    --muted: #78716c;
+    --border: #d6cfc2;
+    --border-light: #e8e2d8;
+    --highlight-bg: #fef9ec;
+    --highlight-border: #e8c94a;
+    --success: #2d6a4f;
+    --success-bg: #d8f3dc;
+    --focus-ring: #2563eb;
+    --feedback-bg: #1c1917;
+    --feedback-text: #e8e0d4;
+    --feedback-accent: #c4922a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* ===== SKIP LINK ===== */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    background: var(--focus-ring);
+    color: white;
+    padding: 0.5rem 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    text-decoration: none;
+    z-index: 9999;
+    border-radius: 0 0 4px 0;
+  }
+  .skip-link:focus { top: 0; }
+
+  /* ===== FOCUS STYLES ===== */
+  :focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* ===== MASTHEAD ===== */
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2rem 2rem 1.75rem;
+    border-bottom: 4px solid var(--rust);
+  }
+
+  .masthead-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .masthead h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .masthead-sub {
+    font-size: 0.9rem;
+    color: #b0a898;
+    margin-top: 0.4rem;
+    font-style: italic;
+  }
+
+  /* ===== 5R REFERENCE BAR ===== */
+  .framework-bar {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem;
+  }
+
+  .framework-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .framework-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .r-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+  }
+
+  .r-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.78rem;
+    cursor: default;
+  }
+
+  .r-letter {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--rust);
+    font-size: 0.85rem;
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 5rem;
+  }
+
+  /* ===== INSTRUCTIONS ===== */
+  .instructions {
+    background: var(--highlight-bg);
+    border: 1px solid var(--highlight-border);
+    border-left: 4px solid var(--gold);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 2rem;
+    border-radius: 2px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--slate);
+  }
+
+  .instructions strong { color: var(--ink); }
+
+  /* ===== EVENT NAVIGATION ===== */
+  .event-nav {
+    margin-bottom: 1.75rem;
+  }
+
+  .event-nav-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .nav-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  .nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--warm-white);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    transition: all 0.18s ease;
+  }
+
+  .nav-btn[aria-current="true"] {
+    border-color: var(--rust);
+    background: var(--rust);
+    color: white;
+  }
+
+  .nav-btn.completed {
+    border-color: var(--success);
+    background: var(--success-bg);
+    color: var(--success);
+  }
+
+  .nav-btn:hover:not([aria-current="true"]) {
+    border-color: var(--rust);
+    background: var(--highlight-bg);
+    color: var(--ink);
+  }
+
+  /* ===== PROGRESS ===== */
+  .progress-bar-wrap {
+    margin-bottom: 1.5rem;
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 0.35rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .progress-track {
+    height: 4px;
+    background: var(--border-light);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--rust);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* ===== EVENT CARD ===== */
+  .event-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--rust);
+    border-radius: 2px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .event-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .event-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.85rem;
+    line-height: 1.25;
+  }
+
+  .event-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--slate);
+    border-left: 3px solid var(--border);
+    padding-left: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  /* ===== SLIDERS ===== */
+  .sliders-section legend {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.85rem;
+    display: block;
+  }
+
+  .sliders-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 560px) {
+    .sliders-grid { grid-template-columns: 1fr; }
+  }
+
+  .slider-group {
+    background: var(--paper);
+    border: 1px solid var(--border-light);
+    border-radius: 2px;
+    padding: 0.9rem 1rem;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+  }
+
+  .slider-label-text {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .r-initial {
+    font-family: 'Playfair Display', serif;
+    color: var(--rust);
+    font-weight: 700;
+    margin-right: 0.2rem;
+  }
+
+  .slider-value-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--rust);
+    min-width: 3ch;
+    text-align: right;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(
+      to right,
+      var(--rust) 0%,
+      var(--rust) var(--pct, 0%),
+      var(--border) var(--pct, 0%),
+      var(--border) 100%
+    );
+    outline: none;
+    cursor: pointer;
+    display: block;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--rust);
+    border: 2px solid var(--warm-white);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--rust);
+    border: 2px solid var(--warm-white);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+    cursor: pointer;
+  }
+
+  input[type="range"]:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+  .scale-endpoints {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    user-select: none;
+  }
+
+  /* ===== REASONING ===== */
+  .reasoning-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .reasoning-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+
+  .reasoning-hint {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 95px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.75rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--paper);
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 0;
+    border-color: var(--focus-ring);
+  }
+
+  /* ===== SUBMIT BUTTON ===== */
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--rust);
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+
+  .submit-btn:hover { background: var(--rust-dark); }
+
+  .submit-btn:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  .submit-btn[aria-disabled="true"] {
+    background: var(--border);
+    color: var(--muted);
+    cursor: default;
+  }
+
+  /* ===== FEEDBACK BOX ===== */
+  .feedback-box {
+    margin-top: 1.25rem;
+    background: var(--feedback-bg);
+    color: var(--feedback-text);
+    border-radius: 2px;
+    padding: 1.4rem 1.6rem;
+    display: none;
+    animation: fadeSlideIn 0.35s ease;
+  }
+
+  .feedback-box[aria-hidden="false"] { display: block; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .feedback-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--feedback-accent);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ===== SCORE COMPARISON TABLE ===== */
+  .score-comparison {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.4rem;
+    margin-bottom: 1.1rem;
+  }
+
+  @media (max-width: 520px) {
+    .score-comparison { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .score-compare-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    padding: 0.45rem 0.5rem;
+    text-align: center;
+  }
+
+  .score-compare-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.57rem;
+    letter-spacing: 0.04em;
+    color: #a09080;
+    display: block;
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+  }
+
+  .score-compare-values {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+  }
+
+  .score-yours  { color: #e8e0d4; font-weight: 500; }
+  .score-sep    { color: #555; font-size: 0.6rem; }
+  .score-suggested { font-weight: 500; }
+  .score-match  { color: #52c97f; }  /* exact match */
+  .score-close  { color: #f0c040; }  /* ±1 */
+  .score-diff   { color: #e87c60; }  /* ±2+ */
+
+  .score-compare-legend {
+    display: flex;
+    gap: 0.85rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: #a09080;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .score-compare-legend span { display: flex; align-items: center; gap: 0.3rem; }
+  .legend-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .feedback-text {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--feedback-text);
+    margin-bottom: 0.85rem;
+  }
+
+  .feedback-caveat {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #a09080;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 0.75rem;
+    line-height: 1.6;
+  }
+
+  /* ===== NEXT BUTTON ===== */
+  .next-btn {
+    display: none;
+    margin-top: 0.85rem;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    color: var(--feedback-text);
+    padding: 0.5rem 1.1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .next-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  .next-btn:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  .next-btn.show { display: inline-block; }
+
+  /* ===== SUMMARY ===== */
+  .summary-section {
+    display: none;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 2px;
+    padding: 2rem 2rem 2.5rem;
+    animation: fadeSlideIn 0.45s ease;
+  }
+
+  .summary-section.show { display: block; }
+
+  .summary-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .summary-intro {
+    font-size: 0.875rem;
+    color: #a09080;
+    font-style: italic;
+    margin-bottom: 1.75rem;
+    line-height: 1.6;
+  }
+
+  .rankings-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .ranking-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 2px;
+    padding: 0.85rem 1rem;
+  }
+
+  .ranking-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--paper);
+  }
+
+  .ranking-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: #a09080;
+    display: block;
+    margin-top: 0.15rem;
+  }
+
+  .ranking-score-col {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .ranking-score {
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    color: var(--gold);
+    font-weight: 500;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .ranking-score-suggested {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: #7a6f62;
+    display: block;
+    margin-top: 0.1rem;
+    text-align: right;
+  }
+
+  .ranking-bar-wrap {
+    width: 80px;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    margin-top: 0.35rem;
+    overflow: hidden;
+    margin-left: auto;
+  }
+
+  .ranking-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+
+  .summary-reflection {
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid var(--gold);
+    padding: 1.1rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.75;
+    color: #d4c8bc;
+    border-radius: 0 2px 2px 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-reflection p + p { margin-top: 0.75rem; }
+
+  .restart-btn {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.25);
+    color: #a09080;
+    padding: 0.5rem 1.1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .restart-btn:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.4);
+    color: var(--paper);
+  }
+
+  .restart-btn:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  /* ===== VISUALLY HIDDEN ===== */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ===== LIVE REGION ===== */
+  #live-announcer {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ===== HIGH CONTRAST ===== */
+  @media (forced-colors: active) {
+    input[type="range"] { forced-color-adjust: none; }
+    .submit-btn, .next-btn, .restart-btn { border: 2px solid ButtonText; }
+  }
+
+  /* ===== TOOLTIPS ===== */
+  .tip {
+    position: relative;
+  }
+
+  /* Tooltip bubble */
+  .tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: #f0ebe2;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 0.78rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.55;
+    padding: 0.65rem 0.85rem;
+    border-radius: 3px;
+    width: 230px;
+    max-width: min(230px, 85vw);
+    white-space: normal;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+    /* above by default */
+    bottom: calc(100% + 9px);
+    top: auto;
+  }
+
+  /* Arrow — above by default */
+  .tip::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #111;
+    z-index: 201;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    bottom: calc(100% + 1px);
+    top: auto;
+  }
+
+  /* Below variant — for elements near the top of the page */
+  .tip-below::after {
+    bottom: auto;
+    top: calc(100% + 9px);
+  }
+  .tip-below::before {
+    bottom: auto;
+    top: calc(100% + 1px);
+    border-top-color: transparent;
+    border-bottom-color: #111;
+  }
+
+  .tip:hover::after,
+  .tip:hover::before,
+  .tip:focus::after,
+  .tip:focus::before,
+  .tip:focus-within::after,
+  .tip:focus-within::before {
+    opacity: 1;
+  }
+
+  /* Info icon button */
+  .tip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    font-style: normal;
+    font-weight: 500;
+    cursor: help;
+    margin-left: 0.3rem;
+    vertical-align: middle;
+    flex-shrink: 0;
+    color: var(--muted);
+    background: transparent;
+    line-height: 1;
+    padding: 0;
+    /* make it a real button for keyboard access */
+    user-select: none;
+  }
+
+  .tip-icon:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Slightly smaller tooltip for the framework bar pills */
+  .r-pill.tip::after {
+    font-size: 0.75rem;
+    width: 210px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tip::after, .tip::before { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="live-announcer" aria-live="polite" aria-atomic="true" role="status"></div>
+
+<header class="masthead">
+  <div class="masthead-eyebrow" aria-hidden="true">Historical Hack &middot; Module 14</div>
+  <h1>The Significance Scale</h1>
+  <p class="masthead-sub">Evaluating ten events from the 1960s using the 5R framework</p>
+</header>
+
+<nav class="framework-bar" aria-label="5R Framework reference">
+  <div class="framework-inner">
+    <span class="framework-label" id="framework-heading">5R Framework:</span>
+    <ul class="r-pills" aria-labelledby="framework-heading">
+      <li class="r-pill tip tip-below" tabindex="0" data-tip="Was it recognized as extraordinary at the time? Did it break sharply with what came before? Would contemporaries have called it unprecedented?"><span class="r-letter" aria-hidden="true">R</span><span>Remarkable</span></li>
+      <li class="r-pill tip tip-below" tabindex="0" data-tip="Is it still taught, commemorated, or referenced today? Do people mark its anniversary? Is it known outside of academic circles?"><span class="r-letter" aria-hidden="true">R</span><span>Remembered</span></li>
+      <li class="r-pill tip tip-below" tabindex="0" data-tip="What does it expose about the values, power structures, or assumptions of its time? Does it show something that was hidden or denied? What would we miss without it?"><span class="r-letter" aria-hidden="true">R</span><span>Revealing</span></li>
+      <li class="r-pill tip tip-below" tabindex="0" data-tip="Do its themes or conflicts still feel alive today? Can you draw a direct line to present-day debates? Would people today recognize themselves in it?"><span class="r-letter" aria-hidden="true">R</span><span>Resonant</span></li>
+      <li class="r-pill tip tip-below" tabindex="0" data-tip="What specifically changed because of this? Can you name laws, policies, or movements that are different? Would those changes have happened anyway without this event?"><span class="r-letter" aria-hidden="true">R</span><span>Resulting in Change</span></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main-content" class="main">
+
+  <div class="instructions" role="note">
+    <strong>How this works:</strong> For each event, rate it 1–5 on all five Rs, then write a sentence or two explaining your reasoning. When you submit, you will see a sample analysis with suggested scores and explanations. <strong>These are not the only defensible answers</strong> — historians genuinely disagree about significance, and your reasoning matters more than matching the suggested scores. <strong>Fame is not the same as significance.</strong> Some events below are very well known but arguably less significant than their reputation suggests.
+  </div>
+
+  <nav aria-label="Event navigation">
+    <span class="event-nav-label" id="nav-label">Jump to event:</span>
+    <ul class="nav-buttons" aria-labelledby="nav-label" id="eventNav"></ul>
+  </nav>
+
+  <div class="progress-bar-wrap" role="status" aria-label="Progress">
+    <div class="progress-label">
+      <span id="progressText">Event 1 of 10</span>
+      <span id="progressPct">0% complete</span>
+    </div>
+    <div class="progress-track" aria-hidden="true">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="eventContainer"></div>
+  <div class="summary-section" id="summarySection" aria-label="Your completed rankings" tabindex="-1"></div>
+
+</main>
+
+<script>
+// ===== DATA =====
+const EVENTS = [
+  {
+    id: 1,
+    title: "Bloody Sunday and the Selma Marches",
+    year: "March 7, 1965",
+    desc: "Six hundred peaceful marchers attempting to cross the Edmund Pettus Bridge in Selma, Alabama were attacked by state troopers with clubs and tear gas. John Lewis suffered a fractured skull. Television footage of the attack was broadcast nationally and internationally. Eight days later, President Johnson addressed Congress to introduce the Voting Rights Act. The Act was signed into law five months later, leading to a quarter million new Black voter registrations within a year.",
+    feedback: {
+      scores: { remarkable: 5, remembered: 5, revealing: 5, resonant: 5, resulting: 5 },
+      total: 25,
+      analysis: "Selma is one of the relatively rare events that scores high across all five Rs, which is part of what makes it such a useful anchor for learning this framework. It was immediately recognized as extraordinary — the images of peaceful marchers being beaten were broadcast nationwide within hours and shocked audiences who had been told progress was being made. It has been commemorated annually and remains a national landmark, with presidents still marching across the Edmund Pettus Bridge on milestone anniversaries. It is deeply revealing of the violent infrastructure of disenfranchisement in the South — not what officials claimed, but what actually happened when Black Americans tried to vote. It remains intensely resonant today as debates about voting rights and voter suppression continue. And John Lewis himself said: 'If there is any single event that gave birth to the Voting Rights Act, it was the Selma effort.' The causal chain from the march to the legislation is unusually direct.",
+      caveat: "One reasonable debate: is Selma more significant than the Voting Rights Act it produced? Some historians argue that the legislation itself — not the march — was the turning point, since marches had happened before without producing federal action. You could argue that Selma's score for 'Resulting in Change' should actually belong to the Act rather than the march. Both positions are defensible."
+    }
+  },
+  {
+    id: 2,
+    title: "The Voting Rights Act of 1965",
+    year: "August 6, 1965",
+    desc: "President Johnson signed legislation prohibiting states from passing laws that discriminated against voters on the basis of race, effectively outlawing literacy tests and other barriers used to disenfranchise Black voters across the South for decades. The U.S. Department of Justice called it the most effective piece of federal civil rights legislation ever enacted. Research shows it led to massive increases in Black voter registration and turnout, and has been linked to concrete policy outcomes including greater public goods provision in areas with higher Black population shares.",
+    feedback: {
+      scores: { remarkable: 4, remembered: 3, revealing: 4, resonant: 5, resulting: 5 },
+      total: 21,
+      analysis: "The Voting Rights Act scores very high for Resulting in Change and Resonant — it directly produced massive increases in Black voter registration, influenced public goods provision, and shaped congressional composition in measurable ways. Its resonance today is perhaps stronger than ever, as sections of the Act have been weakened or struck down by the Supreme Court in recent decades, making it a live political issue. It is revealing of what it took to protect a constitutional right that had theoretically existed since the Fifteenth Amendment in 1870. Where it scores somewhat lower is in Remarkable and Remembered. While the Act was enormously important, it was a legislative outcome — less viscerally dramatic than Bloody Sunday, and arguably less remembered by the general public than the march that produced it. Many Americans today could not name it or date it, which is itself a revealing fact about how history gets remembered.",
+      caveat: "There is a strong argument for giving this event a higher Remarkable score, particularly given Johnson's dramatic joint address to Congress in which he borrowed the movement's own slogan — 'And we shall overcome' — from a sitting president addressing Congress. Historians debate whether the Act or the march was the more historically significant event. Both answers can be well-defended."
+    }
+  },
+  {
+    id: 3,
+    title: "The Cuban Missile Crisis",
+    year: "October 1962",
+    desc: "For thirteen days, the United States and the Soviet Union stood at the brink of nuclear war after American spy planes photographed Soviet missile installations under construction in Cuba. Kennedy chose a naval blockade rather than a military strike. After secret negotiations — including a U.S. pledge not to invade Cuba and a quiet agreement to remove American missiles from Turkey — the Soviets withdrew their missiles. It was the closest the Cold War ever came to direct nuclear exchange, and documents declassified decades later revealed the danger was even greater than the public knew at the time.",
+    feedback: {
+      scores: { remarkable: 5, remembered: 5, revealing: 5, resonant: 4, resulting: 4 },
+      total: 23,
+      analysis: "The Cuban Missile Crisis scores high across nearly all five Rs. It was immediately recognized as an existential moment — Americans stocked fallout shelters and said goodbye to family members believing nuclear war might be imminent. It is very well remembered, taught in virtually every American history course and referenced constantly in discussions of nuclear deterrence and crisis management. It is deeply revealing of Cold War psychology, the logic of nuclear deterrence, and how close two superpowers could come to catastrophic war through miscalculation and miscommunication. The Resulting in Change score is somewhat more debatable — it led to the installation of a direct hotline between Washington and Moscow, and shaped subsequent arms control negotiations, but the Cold War itself continued for nearly three more decades. Resonant is high but arguably slightly lower than Selma because, while nuclear proliferation remains a concern, the specific Cold War superpower dynamic has changed considerably.",
+      caveat: "Documents declassified after the Cold War revealed that the crisis was even more dangerous than the public knew — Soviet submarines had nuclear-armed torpedoes and commanders had authority to use them. This new evidence has actually increased the event's historical significance to historians, which is a good example of how significance can change as new information emerges."
+    }
+  },
+  {
+    id: 4,
+    title: "The March on Washington for Jobs and Freedom",
+    year: "August 28, 1963",
+    desc: "Approximately 250,000 people gathered at the Lincoln Memorial in Washington, D.C. to call for civil rights legislation, school integration, and an end to employment discrimination. Martin Luther King Jr. delivered his 'I Have a Dream' speech. The march put enormous pressure on Congress and President Kennedy, who met with its leaders afterward. The Civil Rights Act of 1964 was passed the following year. The march called for not only civil rights but also economic justice, including a minimum wage increase — demands that received less attention in subsequent historical memory.",
+    feedback: {
+      scores: { remarkable: 5, remembered: 5, revealing: 4, resonant: 4, resulting: 3 },
+      total: 21,
+      analysis: "The March on Washington scores very high for Remarkable and Remembered — it is one of the most famous events in American history, and King's 'I Have a Dream' speech is arguably the most quoted address in modern American public life. Where the scoring becomes more interesting is Resulting in Change. The Civil Rights Act of 1964 passed the following year, but the relationship between the march and the Act is less direct than the relationship between Bloody Sunday and the Voting Rights Act. Kennedy had already been working on civil rights legislation before the march, and it is genuinely debated how much the march moved Congress. The march's economic demands — a minimum wage increase, jobs programs — were largely not met, which is an important piece of the story that gets lost when the event is reduced to King's speech. This is a case where the event's fame might lead students to overrate its Resulting in Change score.",
+      caveat: "This event is a good test of the distinction between Remarkable/Remembered and Resulting in Change. Something can be the most famous speech in American history and still have limited direct legislative impact. Historians who study the March on Washington closely often point out that its economic justice demands were largely abandoned in the years that followed — a gap between the event's fame and its full historical legacy."
+    }
+  },
+  {
+    id: 5,
+    title: "The Tet Offensive",
+    year: "January–February 1968",
+    desc: "North Vietnamese and Viet Cong forces launched surprise attacks on more than 100 South Vietnamese cities simultaneously during the lunar new year holiday, including a partial breach of the U.S. Embassy compound in Saigon. American and South Vietnamese forces ultimately repelled the attacks. North Vietnamese forces suffered an estimated 58,000 casualties compared to roughly 4,000 Americans killed. But the offensive shattered the Johnson administration's credibility — General Westmoreland had declared the end of the war was in sight just weeks earlier. Walter Cronkite, called the most trusted man in America, declared the war a stalemate. Johnson announced he would not seek reelection thirty-three days after Cronkite's broadcast.",
+    feedback: {
+      scores: { remarkable: 5, remembered: 4, revealing: 5, resonant: 4, resulting: 5 },
+      total: 23,
+      analysis: "The Tet Offensive is a fascinating case because its historical significance is almost the inverse of its military outcome. The North Vietnamese forces suffered catastrophic losses — far higher than the Americans — and failed to hold any of the positions they seized. By any conventional military measure, it was a defeat for the attackers. Yet it is one of the most consequential events of the entire Vietnam War. It scores very high for Revealing: it exposed the credibility gap between the Johnson administration's optimistic public statements and the reality on the ground in Vietnam. It scores high for Resulting in Change: it effectively ended Johnson's presidency, accelerated American withdrawal planning, and transformed public opinion on the war. This is a case where a military failure produced a political and cultural transformation.",
+      caveat: "Some military historians argue that the Tet Offensive's significance has been overstated — that the United States was already questioning Vietnam involvement before Tet, and that the offensive itself was a clear American military victory. This is a legitimate debate. The argument that Tet changed history rests not on the battlefield outcome but on its effect on American public opinion and political will, which is itself a significant claim about how wars are won and lost."
+    }
+  },
+  {
+    id: 6,
+    title: "Freedom Summer",
+    year: "Summer 1964",
+    desc: "SNCC and CORE brought hundreds of volunteers — mostly White college students from the North — to Mississippi to register Black voters and build freedom schools. Three civil rights workers, James Chaney, Michael Schwerner, and Andrew Goodman, were murdered by the Ku Klux Klan. The Mississippi Freedom Democratic Party was organized directly as a result. The project generated national attention that helped build momentum for the Voting Rights Act passed the following year. Freedom Summer was arguably the most dangerous sustained civil rights campaign of the decade.",
+    feedback: {
+      scores: { remarkable: 4, remembered: 3, revealing: 5, resonant: 4, resulting: 4 },
+      total: 20,
+      analysis: "Freedom Summer scores high for Revealing and is a strong case for the limits of the Remembered category as a measure of true significance. The murders of Chaney, Schwerner, and Goodman generated national outrage in part because two of the victims were White — a disturbing but historically accurate observation about whose deaths prompted greater national attention. The project revealed the systematic brutality used to prevent Black Americans from voting and demonstrated that this violence extended to anyone who challenged it. It helped build the organizational infrastructure and political momentum for the Voting Rights Act. Yet it is substantially less remembered than the March on Washington or Bloody Sunday, despite arguably being as consequential and more dangerous. This is exactly the kind of case where the framework helps — a relatively obscure event with very high historical significance.",
+      caveat: "Freedom Summer is a good example of how significance and fame can diverge dramatically. The March on Washington is far more famous but Freedom Summer produced more direct organizational and legislative consequences. If you rated Freedom Summer lower than the March on Washington on Resulting in Change, it is worth reconsidering — the chain from Freedom Summer to the Mississippi Freedom Democratic Party to the Voting Rights Act is quite direct."
+    }
+  },
+  {
+    id: 7,
+    title: "John Glenn Orbits Earth",
+    year: "February 20, 1962",
+    desc: "Astronaut John Glenn became the first American to orbit the Earth, completing three orbits in nearly five hours aboard Friendship 7. The mission was a significant moment in the Space Race against the Soviet Union, which had launched the first human into orbit (Yuri Gagarin) the previous year. Glenn was celebrated as a national hero. The mission was part of the Mercury program that preceded the Apollo program, which landed Americans on the Moon in 1969. Glenn later served five terms as a U.S. senator from Ohio.",
+    feedback: {
+      scores: { remarkable: 5, remembered: 4, revealing: 3, resonant: 2, resulting: 2 },
+      total: 16,
+      analysis: "John Glenn's orbital flight is one of the most famous events on this list, which makes it a useful test of the fame-versus-significance distinction. It scores very high for Remarkable — it was an extraordinary achievement that captured global attention in 1962. It is fairly well Remembered. But the scores drop significantly for Revealing, Resonant, and Resulting in Change. What does the flight reveal about American society beyond the technological achievement? Less than some other events on this list. Its direct consequences were largely subsumed by the broader Mercury and Apollo programs — the Moon landing is the event that resulted in major lasting change, not Glenn's orbital flight specifically. And its resonance today is limited compared to events whose consequences are still unresolved.",
+      caveat: "A reasonable counterargument: Glenn's flight should score higher for Revealing because the Space Race was intimately connected to Cold War ideology — the race to space was about demonstrating the superiority of American democratic capitalism over Soviet communism. On that reading, Glenn's flight was as much a geopolitical statement as a technological one. This would push the Revealing and Resonant scores up. Both readings are defensible."
+    }
+  },
+  {
+    id: 8,
+    title: "Woodstock Music Festival",
+    year: "August 1969",
+    desc: "An estimated 400,000 people gathered on a farm in upstate New York for a three-day music festival featuring Jimi Hendrix, Janis Joplin, The Who, Jefferson Airplane, and dozens of others. It became a defining cultural symbol of the counterculture movement, the antiwar movement, and the social upheavals of the 1960s. It was followed by several attempts to recreate it, most of which failed or ended in disaster. The festival has remained a reference point in American cultural memory. A Rolling Stones concert at Altamont Speedway four months later, which ended in a stabbing death, is often discussed as 'the end of the sixties.'",
+    feedback: {
+      scores: { remarkable: 4, remembered: 5, revealing: 4, resonant: 2, resulting: 1 },
+      total: 16,
+      analysis: "Woodstock is perhaps the strongest test on this list of the difference between fame and historical significance. It scores very high for Remembered — it is one of the most culturally iconic events of the twentieth century. It scores reasonably for Remarkable and Revealing. But it scores very low for Resulting in Change and Resonant. What specific laws, policies, or social structures changed because of Woodstock? The answer is difficult to identify. The counterculture it symbolized had been building for years before Woodstock and continued after it regardless of whether the festival had occurred. Its resonance today is primarily nostalgic rather than politically or socially active. Woodstock is famous because it represents a cultural moment beautifully — but representation and causation are different things.",
+      caveat: "A fair counterargument: Woodstock's significance lies in what it symbolized rather than what it caused, and symbolic events can shape cultural consciousness in ways that matter historically. The festival demonstrated that hundreds of thousands of young Americans shared a set of values — opposition to the war, rejection of mainstream culture — that would influence American politics for decades. If you weighted the Revealing and Resonant scores higher on those grounds, that is defensible. But the Resulting in Change score remains difficult to argue above a 2."
+    }
+  },
+  {
+    id: 9,
+    title: "The Publication of The Feminine Mystique",
+    year: "February 1963",
+    desc: "Betty Friedan's book identified what she called 'the problem that has no name' — the widespread dissatisfaction of educated White middle-class women who felt unfulfilled by their roles as housewives. The book sold three million copies in three years and is widely credited with reigniting second-wave feminism in the United States. Friedan went on to co-found the National Organization for Women in 1966. Critics have noted that the book primarily addressed the experiences of White, educated, middle-class women and did not speak to the experiences of poor women or women of color, many of whom had always worked outside the home.",
+    feedback: {
+      scores: { remarkable: 3, remembered: 3, revealing: 4, resonant: 4, resulting: 4 },
+      total: 18,
+      analysis: "The Feminine Mystique is deliberately included on this list because it is not an event in the conventional sense — it is a book. This raises an important methodological question: what counts as historically significant action? A book that reshapes how millions of people understand their own lives and produces a major social movement is arguably more consequential than many conventional events. It scores high for Revealing — it named and documented a social problem that had been invisible because it affected people in private. It scores reasonably for Resulting in Change, since Friedan directly channeled the book's reception into founding NOW and the second-wave feminist movement. It scores lower for Remarkable and Remembered, largely because it is less widely known today than it was influential — many people have been shaped by second-wave feminism without knowing Friedan's name.",
+      caveat: "This event is worth discussing in terms of whose experiences count as historically significant. The book's limitation — its focus on White, middle-class women — is itself historically significant. The subsequent feminist movement partly defined itself against Friedan's blind spots, producing the more intersectional feminism of later decades. How you weigh this limitation against the book's influence is a genuine historical debate."
+    }
+  },
+  {
+    id: 10,
+    title: "The Gulf of Tonkin Resolution",
+    year: "August 10, 1964",
+    desc: "Following reported attacks on U.S. Navy ships in the Gulf of Tonkin — one of which the National Security Agency later confirmed did not occur — Congress passed a resolution giving President Johnson authority to use military force in Vietnam without a formal declaration of war. The resolution transformed America's role in Vietnam from military advisor to combatant and gave Johnson virtually unlimited authority to escalate the conflict. Over the next four years, he deployed more than 500,000 troops. The resolution was repealed in 1971. It is one of the clearest examples in American history of Congress authorizing war based on false or manipulated intelligence.",
+    feedback: {
+      scores: { remarkable: 2, remembered: 2, revealing: 5, resonant: 5, resulting: 5 },
+      total: 19,
+      analysis: "The Gulf of Tonkin Resolution is the most instructive case on this list for the fame-versus-significance distinction, but in reverse from Woodstock — it is relatively little known compared to its historical consequences. It scores very low for Remarkable and Remembered. Most Americans today could not name it, date it, or describe what it did. Yet it scores maximum marks for Resulting in Change: it directly authorized the escalation of a war that killed over 58,000 Americans and millions of Vietnamese, ended Johnson's presidency, tore the Democratic Party apart, and shaped American foreign policy for decades. It scores maximum for Resonant: the use of questionable intelligence to authorize military force has been explicitly compared to the 2003 invasion of Iraq and remains a live constitutional debate about war powers. And it scores maximum for Revealing: it shows how a democracy can be led into a major war through manipulated or false information — one of the most important lessons this period offers.",
+      caveat: "The Resulting in Change score could legitimately be assigned to the escalation decisions themselves rather than to the Resolution, since Johnson would likely have found another mechanism to escalate even without it. But the Resolution's significance lies partly in what it reveals about the relationship between Congress and the executive on war powers — a constitutional issue that remains unresolved today."
+    }
+  }
+];
+
+const RS = [
+  { key: "remarkable", label: "Remarkable",        tip: "Was it recognized as extraordinary at the time? Did it break sharply with what came before? Would contemporaries have called it unprecedented?" },
+  { key: "remembered", label: "Remembered",        tip: "Is it still taught, commemorated, or referenced today? Do people mark its anniversary? Is it known outside of academic circles?" },
+  { key: "revealing",  label: "Revealing",          tip: "What does it expose about the values, power structures, or assumptions of its time? Does it show something that was hidden or denied? What would we miss without it?" },
+  { key: "resonant",   label: "Resonant",           tip: "Do its themes or conflicts still feel alive today? Can you draw a direct line to present-day debates? Would people today recognize themselves in it?" },
+  { key: "resulting",  label: "Resulting in Change", tip: "What specifically changed because of this? Can you name laws, policies, or movements that are different? Would those changes have happened anyway without this event?" }
+];
+
+// ===== STATE =====
+let currentIdx = 0;
+let completed = {};
+
+function announce(msg) {
+  const el = document.getElementById('live-announcer');
+  el.textContent = '';
+  requestAnimationFrame(() => { el.textContent = msg; });
+}
+
+// ===== NAV =====
+function buildNav() {
+  const nav = document.getElementById('eventNav');
+  nav.innerHTML = '';
+  EVENTS.forEach((e, i) => {
+    const li  = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn' + (completed[i] ? ' completed' : '');
+    btn.setAttribute('aria-current', i === currentIdx ? 'true' : 'false');
+    btn.setAttribute('aria-label', `Event ${i + 1}: ${e.title}${completed[i] ? ' (completed)' : ''}`);
+    btn.textContent = i + 1;
+    btn.onclick = () => goTo(i);
+    li.appendChild(btn);
+    nav.appendChild(li);
+  });
+
+  const done = Object.keys(completed).length;
+  document.getElementById('progressText').textContent = `Event ${currentIdx + 1} of ${EVENTS.length}`;
+  document.getElementById('progressPct').textContent  = `${Math.round((done / EVENTS.length) * 100)}% complete`;
+  document.getElementById('progressFill').style.width = `${(done / EVENTS.length) * 100}%`;
+}
+
+function goTo(idx) {
+  currentIdx = idx;
+  buildNav();
+  renderEvent();
+  document.getElementById('eventContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== RENDER EVENT =====
+function renderEvent() {
+  const e     = EVENTS[currentIdx];
+  const saved = completed[currentIdx];
+  const isLast = currentIdx === EVENTS.length - 1;
+
+  let slidersHTML = `<fieldset class="sliders-section"><legend>Rate each R from 1 (minimal) to 5 (transformative)</legend><div class="sliders-grid">`;
+
+  RS.forEach(r => {
+    const val      = saved ? saved.scores[r.key] : 3;
+    const pct      = ((val - 1) / 4) * 100;
+    const inputId  = `slider_${r.key}_${e.id}`;
+    const displayId = `display_${r.key}_${e.id}`;
+
+    slidersHTML += `
+      <div class="slider-group">
+        <div class="slider-header">
+          <label class="slider-label-text" for="${inputId}">
+            <span class="r-initial" aria-hidden="true">R</span>${r.label}
+            <span class="tip" data-tip="${r.tip}" style="display:inline-block;"><button type="button" class="tip-icon" tabindex="0" aria-label="Guiding questions for ${r.label}: ${r.tip}">i</button></span>
+          </label>
+          <span class="slider-value-display" id="${displayId}" aria-live="polite" aria-atomic="true">
+            <span class="sr-only">${r.label} score: </span>${val}
+          </span>
+        </div>
+        <input
+          type="range"
+          id="${inputId}"
+          name="${inputId}"
+          min="1" max="5"
+          value="${val}"
+          step="1"
+          style="--pct: ${pct}%"
+          aria-label="${r.label}: ${val} out of 5"
+          aria-valuemin="1"
+          aria-valuemax="5"
+          aria-valuenow="${val}"
+          aria-valuetext="${val} out of 5 — ${r.label}"
+          ${saved ? 'disabled' : ''}
+          oninput="updateSlider(this, '${r.key}', ${e.id}, '${displayId}')">
+        <div class="scale-endpoints" aria-hidden="true">
+          <span>1 — minimal</span><span>5 — transformative</span>
+        </div>
+      </div>`;
+  });
+
+  slidersHTML += `</div></fieldset>`;
+
+  const feedbackHTML = saved ? buildFeedback(e, saved, isLast) : '';
+  const textareaId   = `reasoning_${e.id}`;
+
+  document.getElementById('eventContainer').innerHTML = `
+    <article class="event-card" aria-label="${e.title}">
+      <div class="event-meta" aria-hidden="true">Event ${currentIdx + 1} of ${EVENTS.length} &nbsp;&middot;&nbsp; ${e.year}</div>
+      <h2 class="event-title">${e.title}</h2>
+      <p class="event-desc">${e.desc}</p>
+
+      ${slidersHTML}
+
+      <div class="reasoning-section">
+        <label class="reasoning-label" for="${textareaId}">Your Reasoning</label>
+        <span class="reasoning-hint" id="hint_${e.id}">Write 2–3 sentences explaining your ratings. Which R score was hardest to assign? Where were you most uncertain?</span>
+        <textarea
+          id="${textareaId}"
+          name="${textareaId}"
+          aria-describedby="hint_${e.id}"
+          placeholder="Write your reasoning here before submitting..."
+          ${saved ? 'disabled aria-disabled="true"' : ''}
+        >${saved ? saved.reasoning : ''}</textarea>
+      </div>
+
+      <button
+        class="submit-btn"
+        id="submitBtn_${e.id}"
+        onclick="handleSubmit(${e.id})"
+        ${saved ? 'aria-disabled="true"' : ''}
+        aria-label="${saved ? 'Already submitted' : 'Submit your ratings for feedback'}">
+        ${saved ? '&#10003; Submitted' : '&rarr; Submit for Feedback'}
+      </button>
+
+      ${feedbackHTML}
+    </article>`;
+}
+
+// ===== BUILD FEEDBACK =====
+function buildFeedback(event, saved, isLast) {
+  const fb = event.feedback;
+
+  // Score comparison grid
+  const comparisonHTML = RS.map(r => {
+    const yours     = saved.scores[r.key];
+    const suggested = fb.scores[r.key];
+    const diff      = Math.abs(yours - suggested);
+    const cls       = diff === 0 ? 'score-match' : diff === 1 ? 'score-close' : 'score-diff';
+    const shortLabel = r.label === 'Resulting in Change' ? 'Resulting' : r.label;
+    return `
+      <div class="score-compare-item">
+        <span class="score-compare-label">${shortLabel}</span>
+        <div class="score-compare-values">
+          <span class="score-yours">${yours}</span>
+          <span class="score-sep">/</span>
+          <span class="score-suggested ${cls}">${suggested}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  const nextLabel  = isLast ? '&rarr; See Your Rankings' : '&rarr; Next Event';
+  const nextAction = isLast ? 'showSummary()' : `goTo(${currentIdx + 1})`;
+
+  return `
+    <div class="feedback-box" aria-hidden="false" aria-label="Sample analysis for ${event.title}" role="region" tabindex="-1" id="feedback_${event.id}">
+      <div class="feedback-eyebrow" aria-hidden="true">Sample Analysis</div>
+
+      <div class="score-compare-legend" aria-hidden="true">
+        <span><span class="legend-dot" style="background:#52c97f"></span>Exact match</span>
+        <span><span class="legend-dot" style="background:#f0c040"></span>&plusmn;1</span>
+        <span><span class="legend-dot" style="background:#e87c60"></span>&plusmn;2 or more</span>
+        <span style="margin-left:auto;color:#666">You &nbsp;/&nbsp; <span style="color:var(--feedback-accent)">Suggested</span></span>
+      </div>
+
+      <div class="score-comparison" aria-label="Score comparison: your ratings vs suggested ratings" role="table">
+        ${comparisonHTML}
+      </div>
+
+      <p class="feedback-text">${fb.analysis}</p>
+      <p class="feedback-caveat">${fb.caveat}</p>
+      <button class="next-btn show" onclick="${nextAction}" aria-label="${isLast ? 'See your rankings' : 'Go to next event'}">
+        ${nextLabel}
+      </button>
+    </div>`;
+}
+
+// ===== SLIDER UPDATE =====
+function updateSlider(el, key, eventId, displayId) {
+  const val = parseInt(el.value);
+  const pct = ((val - 1) / 4) * 100;
+  el.style.setProperty('--pct', pct + '%');
+  el.setAttribute('aria-valuenow', val);
+  el.setAttribute('aria-valuetext', `${val} out of 5 — ${key}`);
+  el.setAttribute('aria-label', `${key}: ${val} out of 5`);
+
+  const display = document.getElementById(displayId);
+  if (display) {
+    const labelText = RS.find(r => r.key === key)?.label || key;
+    display.innerHTML = `<span class="sr-only">${labelText} score: </span>${val}`;
+  }
+}
+
+// ===== SUBMIT =====
+function handleSubmit(eventId) {
+  const event = EVENTS.find(e => e.id === eventId);
+  const btn   = document.getElementById(`submitBtn_${eventId}`);
+  if (btn.getAttribute('aria-disabled') === 'true') return;
+
+  const textarea  = document.getElementById(`reasoning_${eventId}`);
+  const reasoning = textarea.value.trim();
+
+  if (reasoning.length < 15) {
+    textarea.focus();
+    announce('Please write at least a sentence or two explaining your reasoning before submitting.');
+    textarea.setAttribute('aria-invalid', 'true');
+    return;
+  }
+
+  textarea.setAttribute('aria-invalid', 'false');
+
+  const scores = {};
+  RS.forEach(r => {
+    const el = document.getElementById(`slider_${r.key}_${eventId}`);
+    scores[r.key] = el ? parseInt(el.value) : 3;
+  });
+
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+  completed[currentIdx] = { scores, reasoning, total, title: event.title, year: event.year };
+
+  const isLast = currentIdx === EVENTS.length - 1;
+
+  // Disable inputs
+  RS.forEach(r => {
+    const el = document.getElementById(`slider_${r.key}_${eventId}`);
+    if (el) el.disabled = true;
+  });
+  textarea.disabled = true;
+  textarea.setAttribute('aria-disabled', 'true');
+  btn.setAttribute('aria-disabled', 'true');
+  btn.innerHTML = '&#10003; Submitted';
+
+  // Inject feedback
+  const existingFb = btn.closest('.event-card').querySelector('.feedback-box');
+  if (!existingFb) {
+    btn.insertAdjacentHTML('afterend', buildFeedback(event, completed[currentIdx], isLast));
+    const newFb = btn.closest('.event-card').querySelector('.feedback-box');
+    if (newFb) newFb.focus();
+  }
+
+  buildNav();
+  announce(`Feedback revealed for ${event.title}. Your total score was ${total} out of 25.`);
+}
+
+// ===== SUMMARY =====
+function showSummary() {
+  document.getElementById('eventContainer').style.display = 'none';
+
+  const sorted = Object.entries(completed)
+    .map(([i, r]) => ({ idx: parseInt(i), ...r }))
+    .sort((a, b) => b.total - a.total);
+
+  const rankingsHTML = sorted.map((r) => {
+    const pct       = (r.total / 25) * 100;
+    const suggested = EVENTS[r.idx].feedback.total;
+    return `
+      <li class="ranking-item" role="listitem">
+        <div>
+          <span class="ranking-name">${r.title}</span>
+          <span class="ranking-year">${r.year}</span>
+        </div>
+        <div class="ranking-score-col">
+          <span class="ranking-score" aria-label="Your score: ${r.total} out of 25">${r.total}<span style="font-size:0.65rem;color:#7a6f62">/25</span></span>
+          <span class="ranking-score-suggested">suggested: ${suggested}/25</span>
+          <div class="ranking-bar-wrap" aria-hidden="true">
+            <div class="ranking-bar-fill" style="width:${pct}%"></div>
+          </div>
+        </div>
+      </li>`;
+  }).join('');
+
+  const topEvent    = sorted[0];
+  const bottomEvent = sorted[sorted.length - 1];
+
+  const topSuggested    = EVENTS[topEvent.idx].feedback.total;
+  const bottomSuggested = EVENTS[bottomEvent.idx].feedback.total;
+
+  const topAgrees    = Math.abs(topEvent.total - topSuggested) <= 3;
+  const bottomAgrees = Math.abs(bottomEvent.total - bottomSuggested) <= 3;
+
+  const section = document.getElementById('summarySection');
+  section.innerHTML = `
+    <h2 class="summary-title">Your Significance Rankings</h2>
+    <p class="summary-intro">These scores reflect your 5R ratings — not a definitive answer. Historical significance is argued, not memorized. Any ranking you can defend with evidence and reasoning is a legitimate historical position.</p>
+
+    <ol class="rankings-list" aria-label="Your event rankings, highest to lowest">
+      ${rankingsHTML}
+    </ol>
+
+    <div class="summary-reflection" role="region" aria-label="Closing reflection">
+      <p>Look at what you placed at the top and bottom of your list. Are any of the least-famous events near the top? Are any household names near the bottom? That gap between <em>fame</em> and <em>significance</em> is exactly what this framework is designed to surface.</p>
+      <p>You ranked <strong>${topEvent.title}</strong> as most significant${topAgrees ? ' — in agreement with the suggested analysis' : `, while the suggested analysis would place it somewhat differently (suggested total: ${topSuggested}/25)`}. You ranked <strong>${bottomEvent.title}</strong> as least significant${bottomAgrees ? ' — also broadly consistent with the suggested analysis' : `, though the suggested analysis scores it at ${bottomSuggested}/25`}.</p>
+      <p>The most important takeaway is not your totals — it is the moments where you hesitated. Which R was hardest to assign? Where did fame cloud your judgment? Those friction points are where the real historical thinking happens.</p>
+    </div>
+
+    <button class="restart-btn" onclick="restartActivity()" aria-label="Start over from the beginning">
+      &#8635; Start Over
+    </button>`;
+
+  section.classList.add('show');
+  section.focus();
+  announce('Summary complete. Your significance rankings are now displayed.');
+}
+
+// ===== RESTART =====
+function restartActivity() {
+  completed  = {};
+  currentIdx = 0;
+  document.getElementById('summarySection').classList.remove('show');
+  document.getElementById('summarySection').innerHTML = '';
+  document.getElementById('eventContainer').style.display = '';
+  buildNav();
+  renderEvent();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  announce('Activity restarted. Beginning at event 1.');
+}
+
+// ===== INIT =====
+buildNav();
+renderEvent();
+</script>
+</body>
+</html>
