@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founding the Colonies — Matching Activity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1209;
+  --ink-mid: #4a3f2e;
+  --ink-muted: #7a6e5e;
+  --parchment: #f9f4eb;
+  --parchment-dark: #ede5d4;
+  --parchment-border: #d4c9b0;
+  --accent: #7c3d12;
+  --accent-light: #f5ede3;
+  --accent-mid: #c0621c;
+  --teal: #0f5f52;
+  --teal-light: #e2f0ed;
+  --teal-border: #9ecfc3;
+  --navy: #1c3561;
+  --navy-light: #e8edf5;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Inter', system-ui, sans-serif;
+}
+body {
+  font-family: var(--sans);
+  background: var(--parchment);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+}
+.page-wrap { max-width: 900px; margin: 0 auto; }
+.sr-only { position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap; }
+header { border-bottom: 1.5px solid var(--parchment-border); padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-mid); margin-bottom: 0.4rem; }
+h1 { font-family: var(--serif); font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 600; color: var(--ink); margin-bottom: 0.5rem; }
+.subtitle { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.6; font-style: italic; }
+.note-box { background: var(--navy-light); border-left: 3px solid var(--navy); border-radius: 6px; padding: 0.85rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--navy); line-height: 1.6; }
+/* Progress */
+.progress-bar-wrap { margin-bottom: 1.75rem; }
+.progress-label { font-size: 0.78rem; font-weight: 500; color: var(--ink-muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.progress-label span { color: var(--accent); font-weight: 600; }
+.progress-track { background: var(--parchment-dark); border-radius: 20px; height: 5px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 20px; width: 0; transition: width 0.4s; }
+/* Match grid */
+.match-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px 16px;
+  margin-bottom: 2rem;
+  align-items: start;
+}
+/* Column headers */
+.col-header {
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-muted);
+  padding-bottom: 0.4rem; border-bottom: 1px solid var(--parchment-border);
+  margin-bottom: 2px;
+}
+/* Match items — both colony names and descriptions are buttons */
+.match-btn {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: left;
+  background: #fff;
+  border: 1.5px solid var(--parchment-border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, box-shadow 0.12s;
+  width: 100%;
+  color: var(--ink);
+}
+.match-btn:hover:not(:disabled) {
+  border-color: var(--accent-mid);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+.match-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* Colony name button */
+.colony-btn { font-weight: 600; font-family: var(--serif); font-size: 0.95rem; }
+/* Selected state */
+.match-btn.selected {
+  border-color: var(--navy);
+  background: var(--navy-light);
+  box-shadow: 0 0 0 3px rgba(28,53,97,0.15);
+}
+/* Error flash */
+.match-btn.error {
+  border-color: #c0392b;
+  background: #fdecea;
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+/* Correct / matched state */
+.match-btn.matched {
+  border-color: var(--teal);
+  background: var(--teal-light);
+  color: var(--teal);
+  cursor: default;
+}
+.match-btn.matched::before {
+  content: '✓ ';
+  font-weight: 700;
+}
+.match-btn.matched:disabled { opacity: 1; }
+/* Completion message */
+.completion { display: none; background: var(--parchment-dark); border: 1px solid var(--parchment-border); border-radius: 10px; padding: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
+.completion.on { display: block; }
+.completion-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.completion-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; }
+.completion-msg { font-size: 0.9rem; color: var(--ink-mid); font-style: italic; line-height: 1.6; max-width: 480px; margin: 0 auto; }
+/* Controls */
+.controls { display: flex; gap: 10px; }
+.btn { font-family: var(--sans); font-size: 0.85rem; font-weight: 500; padding: 0.5rem 1.1rem; border-radius: 6px; border: 1px solid; cursor: pointer; transition: background 0.12s; }
+.btn-secondary { background: transparent; color: var(--ink-mid); border-color: var(--parchment-border); }
+.btn-secondary:hover { background: var(--parchment-dark); }
+/* Responsive: stack columns on narrow screens */
+@media (max-width: 600px) {
+  .match-grid { grid-template-columns: 1fr; }
+  .col-header:last-of-type { margin-top: 1rem; }
+}
+</style>
+</head>
+<body>
+<div id="sr-announce" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+<div class="page-wrap">
+  <header>
+    <p class="eyebrow">Module 3 · Restoration Colonies · Apply It</p>
+    <h1>Founding the Colonies</h1>
+    <p class="subtitle">Eight colonies, eight founding stories — match each colony to how it was established.</p>
+  </header>
+
+  <div class="note-box" role="note">
+    <strong>What to do:</strong> Click a colony name on the left to select it, then click the description on the right that best matches it. Correct matches lock in green; incorrect ones let you try again. All keyboard-navigable with Tab and Enter.
+  </div>
+
+  <div class="progress-bar-wrap">
+    <p class="progress-label"><span id="match-count">0</span> of 8 matched</p>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog"
+           role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="8"
+           aria-label="Colonies matched"></div>
+    </div>
+  </div>
+
+  <div class="completion" id="completion" aria-live="polite" aria-atomic="true">
+    <div class="completion-icon" aria-hidden="true">★</div>
+    <p class="completion-title">All eight matched!</p>
+    <p class="completion-msg">You've connected each Restoration colony to its founding story — from Maryland's Catholic refuge to Georgia's parliamentary experiment on the southern frontier.</p>
+  </div>
+
+  <div class="match-grid" id="match-grid">
+    <div class="col-header">Colony</div>
+    <div class="col-header">How it was founded</div>
+    <!-- Populated by JS -->
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-secondary" id="reset-btn">Start over</button>
+  </div>
+</div>
+
+<script>
+var PAIRS = [
+  {
+    id: 'maryland',
+    name: 'Maryland',
+    desc: 'Founded in 1634 by the Calvert family (Lord Baltimore) as a refuge for Catholics; the 1649 Toleration Act extended religious freedom to all Christians. Even so, tensions between Catholic proprietors and a Protestant majority produced repeated rebellions over the colony\'s early decades.'
+  },
+  {
+    id: 'connecticut',
+    name: 'Connecticut',
+    desc: 'Founded around 1635–36 when Puritan minister Thomas Hooker led settlers out of Massachusetts Bay seeking more fertile land and a more democratic form of government. Its 1639 Fundamental Orders became one of the earliest written frames of government in the English colonies.'
+  },
+  {
+    id: 'rhode-island',
+    name: 'Rhode Island',
+    desc: 'Founded in 1636 by Roger Williams after he was expelled from Massachusetts Bay for insisting that civil authorities had no right to enforce religious laws and that colonists should pay Native peoples fairly for their land. It became a haven for those facing religious persecution.'
+  },
+  {
+    id: 'carolinas',
+    name: 'The Carolinas',
+    desc: 'Founded under a 1663 royal charter Charles II granted to eight Lords Proprietors. Early settlers — many from Barbados — built a plantation economy dependent on enslaved labor. Political disagreements between north and south eventually split the region into two separate royal colonies in 1729.'
+  },
+  {
+    id: 'new-york',
+    name: 'New York',
+    desc: 'Originally the Dutch colony of New Netherland; seized by English forces during the Second Anglo-Dutch War and granted by Charles II to his brother James, Duke of York, in 1664. The Dutch population resisted assimilation, and it took nearly twenty years before colonists were allowed a representative legislature.'
+  },
+  {
+    id: 'new-jersey',
+    name: 'New Jersey',
+    desc: 'Carved from the territory the Duke of York received in 1664 and granted to Lord Berkeley and Sir George Carteret. It attracted Quakers, Scottish Presbyterians, and others with promises of land grants and religious toleration, making it one of the more diverse of the middle colonies.'
+  },
+  {
+    id: 'pennsylvania',
+    name: 'Pennsylvania',
+    desc: 'Granted in 1681 by Charles II to Quaker William Penn to settle a royal debt. Penn\'s "Holy Experiment" built the colony on religious tolerance and peaceful relations with Native peoples — buying Lenape land rather than seizing it. Philadelphia quickly became the largest and most diverse city in colonial America.'
+  },
+  {
+    id: 'georgia',
+    name: 'Georgia',
+    desc: 'The last of the thirteen colonies, founded in 1732 by James Oglethorpe under a charter from George II. It served as a military buffer against Spanish Florida and a refuge for England\'s "worthy poor." Uniquely, it was the only colony funded by Parliament and initially banned both slavery and alcohol.'
+  }
+];
+
+var matched = {};
+var selectedColony = null;
+var shuffledDescs = [];
+
+function shuffle(a) {
+  var b = a.slice();
+  for (var i = b.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = b[i]; b[i] = b[j]; b[j] = t;
+  }
+  return b;
+}
+
+function announceToSR(msg) {
+  var el = document.getElementById('sr-announce');
+  el.textContent = '';
+  setTimeout(function() { el.textContent = msg; }, 50);
+}
+
+function findPair(id) {
+  for (var i = 0; i < PAIRS.length; i++) { if (PAIRS[i].id === id) return PAIRS[i]; }
+  return null;
+}
+
+function updateProgress() {
+  var n = Object.keys(matched).length;
+  document.getElementById('match-count').textContent = n;
+  var prog = document.getElementById('prog');
+  prog.style.width = (n / 8 * 100) + '%';
+  prog.setAttribute('aria-valuenow', n);
+  prog.setAttribute('aria-valuetext', n + ' of 8 matched');
+  if (n === 8) {
+    document.getElementById('completion').classList.add('on');
+    document.getElementById('completion').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function handleColonyClick(id) {
+  if (matched[id]) return;
+  var btn = document.querySelector('.colony-btn[data-id="' + id + '"]');
+  if (!btn) return;
+  if (selectedColony === id) {
+    btn.classList.remove('selected');
+    btn.setAttribute('aria-pressed', 'false');
+    selectedColony = null;
+    announceToSR(findPair(id).name + ' deselected.');
+    return;
+  }
+  if (selectedColony !== null) {
+    var prevBtn = document.querySelector('.colony-btn[data-id="' + selectedColony + '"]');
+    if (prevBtn) { prevBtn.classList.remove('selected'); prevBtn.setAttribute('aria-pressed', 'false'); }
+  }
+  selectedColony = id;
+  btn.classList.add('selected');
+  btn.setAttribute('aria-pressed', 'true');
+  announceToSR(findPair(id).name + ' selected. Now choose the matching description on the right.');
+}
+
+function handleDescClick(descId) {
+  if (matched[descId]) return;
+  if (selectedColony === null) {
+    announceToSR('Choose a colony name on the left first, then select its matching description.');
+    return;
+  }
+  var colonyBtn = document.querySelector('.colony-btn[data-id="' + selectedColony + '"]');
+  var descBtn = document.querySelector('.desc-btn[data-id="' + descId + '"]');
+  if (!colonyBtn || !descBtn) return;
+
+  if (selectedColony === descId) {
+    // Correct match
+    var name = findPair(selectedColony).name;
+    matched[selectedColony] = true;
+    colonyBtn.classList.remove('selected');
+    colonyBtn.classList.add('matched');
+    colonyBtn.setAttribute('aria-pressed', 'false');
+    colonyBtn.disabled = true;
+    descBtn.classList.add('matched');
+    descBtn.disabled = true;
+    selectedColony = null;
+    updateProgress();
+    announceToSR('Correct! ' + name + ' matched.');
+  } else {
+    // Incorrect match
+    var wrongName = findPair(selectedColony).name;
+    colonyBtn.classList.add('error');
+    descBtn.classList.add('error');
+    var prevSelected = selectedColony;
+    selectedColony = null;
+    colonyBtn.setAttribute('aria-pressed', 'false');
+    setTimeout(function() {
+      colonyBtn.classList.remove('error', 'selected');
+      descBtn.classList.remove('error');
+    }, 700);
+    announceToSR('Not quite. ' + wrongName + ' doesn\'t match that description. Try again.');
+  }
+}
+
+function buildGrid() {
+  var grid = document.getElementById('match-grid');
+  // Clear everything except the two column headers
+  var headers = grid.querySelectorAll('.col-header');
+  grid.innerHTML = '';
+  headers.forEach(function(h) { grid.appendChild(h); });
+
+  shuffledDescs = shuffle(PAIRS.slice());
+
+  PAIRS.forEach(function(pair, i) {
+    // Colony button (left column)
+    var cb = document.createElement('button');
+    cb.type = 'button';
+    cb.className = 'match-btn colony-btn';
+    cb.dataset.id = pair.id;
+    cb.textContent = pair.name;
+    cb.setAttribute('aria-pressed', 'false');
+    cb.setAttribute('aria-label', pair.name + ' — click to select, then choose the matching description');
+    if (matched[pair.id]) {
+      cb.classList.add('matched');
+      cb.disabled = true;
+    }
+    cb.addEventListener('click', function() { handleColonyClick(pair.id); });
+
+    // Description button (right column, shuffled)
+    var desc = shuffledDescs[i];
+    var db = document.createElement('button');
+    db.type = 'button';
+    db.className = 'match-btn desc-btn';
+    db.dataset.id = desc.id;
+    db.textContent = desc.desc;
+    db.setAttribute('aria-label', 'Description: ' + desc.desc.substring(0, 60) + '…');
+    if (matched[desc.id]) {
+      db.classList.add('matched');
+      db.disabled = true;
+    }
+    db.addEventListener('click', function() { handleDescClick(desc.id); });
+
+    grid.appendChild(cb);
+    grid.appendChild(db);
+  });
+}
+
+function resetAll() {
+  matched = {};
+  selectedColony = null;
+  document.getElementById('completion').classList.remove('on');
+  buildGrid();
+  updateProgress();
+  announceToSR('Activity reset. All matches cleared.');
+}
+
+document.getElementById('reset-btn').addEventListener('click', resetAll);
+
+buildGrid();
+updateProgress();
+</script>
+</body>
+</html>
