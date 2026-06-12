@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Holds the Power? — British North America, 1640–1750</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1209;
+  --ink-mid: #4a3f2e;
+  --ink-muted: #7a6e5e;
+  --parchment: #f9f4eb;
+  --parchment-dark: #ede5d4;
+  --parchment-border: #d4c9b0;
+  --accent: #7c3d12;
+  --accent-light: #f5ede3;
+  --accent-mid: #c0621c;
+  --teal: #0f5f52;
+  --teal-light: #e2f0ed;
+  --navy: #1c3561;
+  --navy-light: #e8edf5;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Inter', system-ui, sans-serif;
+}
+body {
+  font-family: var(--sans);
+  background: var(--parchment);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+}
+.page-wrap { max-width: 820px; margin: 0 auto; }
+.sr-only { position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0); }
+header { border-bottom: 1.5px solid var(--parchment-border); padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-mid); margin-bottom: 0.4rem; }
+h1 { font-family: var(--serif); font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 600; color: var(--ink); margin-bottom: 0.5rem; }
+.subtitle { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.6; font-style: italic; }
+.note-box { background: var(--navy-light); border-left: 3px solid var(--navy); border-radius: 6px; padding: 0.85rem 1rem; margin-bottom: 1.75rem; font-size: 0.85rem; color: var(--navy); line-height: 1.6; }
+.step-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.6rem; }
+/* Pool */
+.pool-wrap { margin-bottom: 2rem; }
+#card-pool {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  min-height: 70px; padding: 12px;
+  background: var(--parchment-dark);
+  border: 1.5px dashed var(--parchment-border);
+  border-radius: 10px;
+}
+#card-pool.drag-over { background: #f0ead8; border-color: var(--accent-mid); }
+/* Cards */
+.ecard {
+  background: #fff;
+  border: 0.5px solid var(--parchment-border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: grab;
+  user-select: none;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.82rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  transition: box-shadow 0.12s, opacity 0.12s;
+  max-width: 230px;
+}
+.ecard:active { cursor: grabbing; }
+.ecard.dragging { opacity: 0.4; }
+.ecard .yr { font-family: var(--serif); font-size: 0.9rem; font-weight: 600; color: var(--accent); min-width: 38px; flex-shrink: 0; }
+.ecard .ttl { font-weight: 500; color: var(--ink); line-height: 1.3; }
+/* Timeline */
+.tl-wrap { margin-bottom: 2rem; }
+.progress-wrap { background: var(--parchment-dark); border-radius: 20px; height: 5px; margin-bottom: 1.25rem; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 20px; width: 0; transition: width 0.3s; }
+.tl-rail { position: relative; padding-left: 34px; }
+.tl-rail::before { content:''; position:absolute; left:12px; top:20px; bottom:20px; width:2px; background:var(--parchment-border); border-radius:2px; }
+.slot-row { position: relative; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; }
+.slot-dot { position:absolute; left:-26px; top:18px; width:12px; height:12px; border-radius:50%; background:var(--parchment-dark); border:2px solid var(--parchment-border); transition:background 0.2s,border-color 0.2s; }
+.slot-dot.on { background:var(--accent); border-color:var(--accent); }
+.slot-num { font-family:var(--serif); font-size:0.95rem; font-weight:600; color:var(--ink-muted); min-width:20px; padding-top:13px; flex-shrink:0; }
+.drop-slot {
+  flex: 1; min-height: 52px;
+  border: 1.5px dashed var(--parchment-border);
+  border-radius: 6px; background: #fff;
+  display: flex; align-items: center; padding: 5px 8px;
+  transition: border-color 0.12s, background 0.12s;
+}
+.drop-slot.drag-over { border-color: var(--accent-mid); background: var(--accent-light); }
+.drop-slot.ok { border: 1.5px solid var(--teal); background: var(--teal-light); }
+.drop-slot.no { border: 1.5px solid #c0392b; background: #fdecea; }
+.slot-hint { font-size: 0.78rem; color: #bbb; font-style: italic; }
+/* Feedback */
+.fb-panel {
+  margin-left: 34px; border-radius: 6px; padding: 0.8rem 1rem;
+  margin-top: -4px; margin-bottom: 10px; display: none;
+}
+.fb-panel.ok { display:block; background:var(--teal-light); border:0.5px solid #9ecfc3; }
+.fb-panel.no { display:block; background:#fdecea; border:0.5px solid #e8b4b0; }
+.fb-status { font-size:0.72rem; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.3rem; }
+.fb-panel.ok .fb-status { color:var(--teal); }
+.fb-panel.no .fb-status { color:#c0392b; }
+.fb-text { font-size:0.85rem; line-height:1.6; }
+.fb-panel.ok .fb-text { color:var(--teal); }
+.fb-panel.no .fb-text { color:#922b21; }
+.ptag { display:inline-flex; align-items:center; font-size:0.7rem; font-weight:500; padding:3px 8px; border-radius:20px; margin-top:6px; }
+.pt-parliament { background:var(--navy-light); color:var(--navy); border:0.5px solid #8ba0c4; }
+.pt-monarchy { background:#faf3dc; color:#8a6a00; border:0.5px solid #d4b800; }
+.pt-colonies { background:var(--accent-light); color:var(--accent); border:0.5px solid #d08050; }
+.pt-individual { background:#f0eafa; color:#5b3a9e; border:0.5px solid #b39ddb; }
+/* Controls */
+.controls { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:1.5rem; }
+.btn { font-family:var(--sans); font-size:0.85rem; font-weight:500; padding:0.5rem 1.1rem; border-radius:6px; border:1px solid; cursor:pointer; transition:background 0.12s; }
+.btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+.btn-primary:hover { background:#692f09; }
+.btn-primary:disabled { background:#c9b8a8; border-color:#c9b8a8; cursor:not-allowed; }
+.btn-secondary { background:transparent; color:var(--ink-mid); border-color:var(--parchment-border); }
+.btn-secondary:hover { background:var(--parchment-dark); }
+/* Score */
+.score-area { display:none; background:var(--parchment-dark); border:1px solid var(--parchment-border); border-radius:10px; padding:1.5rem; text-align:center; }
+.score-area.on { display:block; }
+.score-num { font-family:var(--serif); font-size:2.6rem; font-weight:600; color:var(--accent); }
+.score-lbl { font-size:0.82rem; color:var(--ink-muted); margin-bottom:0.75rem; }
+.score-msg { font-size:0.9rem; font-style:italic; color:var(--ink-mid); max-width:480px; margin:0 auto; line-height:1.6; }
+@media(max-width:560px){ .ecard{max-width:100%;width:100%;} #card-pool{flex-direction:column;} }
+</style>
+</head>
+<body>
+<h2 class="sr-only">Interactive timeline: drag eight events into chronological order and learn how each shifted power in England and the colonies.</h2>
+<div class="page-wrap">
+  <header>
+    <p class="eyebrow">Module 3 · British North America · Apply It</p>
+    <h1>Who Holds the Power?</h1>
+    <p class="subtitle">From civil war to the age of reason — how power shifted across England and the colonies, 1640–1750.</p>
+  </header>
+
+  <div class="note-box">
+    <strong>What to do:</strong> Eight events from your reading are shuffled in the box below. Drag each card to its correct position on the timeline — earliest at the top, latest at the bottom. Once all eight are placed, click <em>Check my answers</em> to see how you did.
+  </div>
+
+  <div class="pool-wrap">
+    <p class="step-label">Step 1 — Drag event cards from here…</p>
+    <div id="card-pool"></div>
+  </div>
+
+  <div class="tl-wrap">
+    <p class="step-label">Step 2 — …and drop them onto the timeline in order</p>
+    <div class="progress-wrap"><div class="progress-fill" id="prog"></div></div>
+    <div class="tl-rail" id="tl-rail"></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="check-btn" disabled>Check my answers</button>
+    <button class="btn btn-secondary" id="reset-btn">Start over</button>
+  </div>
+
+  <div class="score-area" id="score-area">
+    <div class="score-num" id="score-num">0/8</div>
+    <div class="score-lbl">events placed correctly</div>
+    <p class="score-msg" id="score-msg"></p>
+  </div>
+</div>
+
+<script>
+var EVENTS = [
+  { id:'civil-war', year:'1642', title:'English Civil War begins', slot:0,
+    ptag:'pt-parliament', plab:'Parliament vs. Crown',
+    ok:'Correct! In 1642 Parliament and King Charles I went to war. Colonies like Virginia sided with the Crown; Puritan Massachusetts sympathized with Parliament — but all stayed officially neutral to avoid being drawn into the fighting.',
+    no:'Not quite. The English Civil War was the first event — it broke out in 1642 when Charles I and Parliament clashed over control of England.' },
+  { id:'charles-exec', year:'1649', title:'Charles I executed; Commonwealth formed', slot:1,
+    ptag:'pt-parliament', plab:'Parliament gains power',
+    ok:'Correct! The execution of Charles I shocked the colonial world. Six colonies immediately declared loyalty to his son. Parliament responded with a 1650 embargo — making clear it considered the colonies under its authority.',
+    no:'Not quite. Charles I was executed in 1649, right after the Civil War ended. This forced every colony to choose sides for the first time.' },
+  { id:'nav-acts', year:'1651', title:'First Navigation Ordinance passed', slot:2,
+    ptag:'pt-monarchy', plab:'Crown tightens economic control',
+    ok:'Correct! Cromwell\'s 1651 Navigation Ordinance required that trade between England and the colonies flow only through English ships — the first major use of law, not just force, to control the colonial economy.',
+    no:'Not quite. The 1651 Navigation Ordinance came right after the Commonwealth was formed, as Cromwell moved to lock colonial trade into English hands.' },
+  { id:'restoration', year:'1660', title:'The Restoration: Charles II returns', slot:3,
+    ptag:'pt-monarchy', plab:'Monarchy restored',
+    ok:'Correct! In 1660 England invited Charles II back to the throne. Colonists hoped a king would roll back Parliament\'s reach — but Charles II instead extended the Navigation Acts and created new proprietary colonies.',
+    no:'Not quite. The Restoration of Charles II came in 1660, after Cromwell\'s death and the collapse of the Commonwealth.' },
+  { id:'dominion', year:'1686', title:'James II creates the Dominion of New England', slot:4,
+    ptag:'pt-monarchy', plab:'Crown centralizes colonies',
+    ok:'Correct! James II merged all New England colonies into one massive royal colony, stripping local charters. Sir Edmund Andros was placed in charge — the most direct royal takeover of colonial self-governance yet attempted.',
+    no:'Not quite. The Dominion of New England was James II\'s project in 1686, his most aggressive move to centralize power over the colonies.' },
+  { id:'glorious-rev', year:'1688', title:'The Glorious Revolution', slot:5,
+    ptag:'pt-parliament', plab:'Parliament limits monarchy',
+    ok:'Correct! When James II fled to France, colonists acted fast. Bostonians overthrew Andros and dismantled the Dominion. The 1689 Bill of Rights limited royal power, and Locke\'s Two Treatises gave colonists language to describe government as a contract with the people.',
+    no:'Not quite. The Glorious Revolution occurred in 1688, when Parliament ousted James II and replaced him with William and Mary.' },
+  { id:'great-awakening', year:'1730s', title:'The First Great Awakening', slot:6,
+    ptag:'pt-individual', plab:'Individual spiritual authority',
+    ok:'Correct! The First Great Awakening spread through the colonies in the 1730s–40s. For the first time, ordinary people — women, the poor, the young — were told they could experience God personally, without the authority of established churches. A radical shift of spiritual power toward the individual.',
+    no:'Not quite. The First Great Awakening began in the 1730s, after the political upheavals of the Glorious Revolution had settled.' },
+  { id:'enlightenment', year:'1740s', title:'The Enlightenment takes hold in the colonies', slot:7,
+    ptag:'pt-individual', plab:'Reason and individual rights',
+    ok:'Correct! By the 1740s Enlightenment ideas were reshaping colonial thinking. Locke argued government existed to protect "life, liberty, and property." Benjamin Franklin embodied this spirit. These ideas would directly fuel the coming Revolution.',
+    no:'Not quite. The Enlightenment became a major intellectual force in the colonies in the 1740s — the last of our eight events chronologically.' }
+];
+
+var placed = new Array(8).fill(null);
+var checked = false;
+var dragId = null;
+
+function shuffle(a) {
+  var b = a.slice();
+  for (var i = b.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = b[i]; b[i] = b[j]; b[j] = t;
+  }
+  return b;
+}
+
+function findEvent(id) {
+  for (var i = 0; i < EVENTS.length; i++) { if (EVENTS[i].id === id) return EVENTS[i]; }
+  return null;
+}
+
+function makeCard(ev) {
+  var c = document.createElement('div');
+  c.className = 'ecard';
+  c.draggable = true;
+  c.dataset.id = ev.id;
+  c.innerHTML = '<span class="ttl">' + ev.title + '</span>';
+  c.addEventListener('dragstart', function(e) {
+    dragId = ev.id;
+    c.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', ev.id);
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  c.addEventListener('dragend', function() { c.classList.remove('dragging'); });
+  return c;
+}
+
+function buildPool(evList) {
+  var pool = document.getElementById('card-pool');
+  pool.innerHTML = '';
+  evList.forEach(function(ev) { pool.appendChild(makeCard(ev)); });
+}
+
+function buildTimeline() {
+  var rail = document.getElementById('tl-rail');
+  rail.innerHTML = '';
+  for (var i = 0; i < 8; i++) {
+    (function(idx) {
+      var row = document.createElement('div');
+      row.className = 'slot-row';
+
+      var dot = document.createElement('div');
+      dot.className = 'slot-dot';
+      dot.id = 'dot-' + idx;
+
+      var num = document.createElement('div');
+      num.className = 'slot-num';
+      num.textContent = idx + 1;
+
+      var slot = document.createElement('div');
+      slot.className = 'drop-slot';
+      slot.dataset.slot = idx;
+      slot.innerHTML = '<span class="slot-hint">Drop here</span>';
+
+      slot.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        slot.classList.add('drag-over');
+      });
+      slot.addEventListener('dragleave', function() { slot.classList.remove('drag-over'); });
+      slot.addEventListener('drop', function(e) {
+        e.preventDefault();
+        slot.classList.remove('drag-over');
+        var id = e.dataTransfer.getData('text/plain') || dragId;
+        if (id) placeCard(id, idx);
+      });
+
+      var fb = document.createElement('div');
+      fb.className = 'fb-panel';
+      fb.id = 'fb-' + idx;
+
+      row.appendChild(dot);
+      row.appendChild(num);
+      row.appendChild(slot);
+      rail.appendChild(row);
+      rail.appendChild(fb);
+    })(i);
+  }
+}
+
+function placeCard(id, slotIdx) {
+  if (checked) return;
+  var ev = findEvent(id);
+  if (!ev) return;
+
+  var oldSlot = placed.indexOf(id);
+  if (oldSlot !== -1) {
+    placed[oldSlot] = null;
+    refreshSlot(oldSlot);
+  }
+
+  var displaced = placed[slotIdx];
+  if (displaced) returnToPool(displaced);
+
+  var poolCard = document.querySelector('.ecard[data-id="' + id + '"]');
+  if (poolCard) poolCard.remove();
+
+  placed[slotIdx] = id;
+
+  var slot = document.querySelector('.drop-slot[data-slot="' + slotIdx + '"]');
+  slot.innerHTML = '';
+  var card = makeCard(ev);
+  card.style.boxShadow = 'none';
+  card.style.border = 'none';
+  var yrSpan = document.createElement('span');
+  yrSpan.className = 'yr';
+  yrSpan.textContent = ev.year;
+  card.insertBefore(yrSpan, card.firstChild);
+  slot.appendChild(card);
+
+  var dot = document.getElementById('dot-' + slotIdx);
+  if (dot) dot.classList.add('on');
+
+  updateProgress();
+  updateCheck();
+}
+
+function refreshSlot(i) {
+  var slot = document.querySelector('.drop-slot[data-slot="' + i + '"]');
+  if (slot) slot.innerHTML = '<span class="slot-hint">Drop here</span>';
+  var dot = document.getElementById('dot-' + i);
+  if (dot) dot.classList.remove('on');
+}
+
+function returnToPool(id) {
+  var ev = findEvent(id);
+  if (!ev) return;
+  document.getElementById('card-pool').appendChild(makeCard(ev));
+}
+
+function updateProgress() {
+  var n = placed.filter(Boolean).length;
+  document.getElementById('prog').style.width = (n / 8 * 100) + '%';
+}
+
+function updateCheck() {
+  document.getElementById('check-btn').disabled = !placed.every(Boolean);
+}
+
+function checkAnswers() {
+  checked = true;
+  var correct = 0;
+  placed.forEach(function(id, i) {
+    if (!id) return;
+    var ev = findEvent(id);
+    var isOk = ev.slot === i;
+    if (isOk) correct++;
+    var slot = document.querySelector('.drop-slot[data-slot="' + i + '"]');
+    slot.classList.add(isOk ? 'ok' : 'no');
+    var fb = document.getElementById('fb-' + i);
+    fb.className = 'fb-panel ' + (isOk ? 'ok' : 'no');
+    fb.innerHTML = '<div class="fb-status">' + (isOk ? '✓ Correct' : '✗ Not quite') + '</div>'
+      + '<p class="fb-text">' + (isOk ? ev.ok : ev.no) + '</p>'
+      + '<span class="ptag ' + ev.ptag + '">' + ev.plab + '</span>';
+  });
+  var msgs = ['Don\'t be discouraged — these events span a century of complex change. Try reviewing the reading and resetting.',
+              'Good start! Review the feedback above to see where the order shifted.',
+              'Strong work! One or two events were close neighbors in time — easy to swap.',
+              'Perfect! You\'ve traced a century of power shifts from England\'s Civil War to the birth of Enlightenment thinking in the colonies.'];
+  var mi = correct < 3 ? 0 : correct < 6 ? 1 : correct < 8 ? 2 : 3;
+  document.getElementById('score-num').textContent = correct + '/8';
+  document.getElementById('score-msg').textContent = msgs[mi];
+  document.getElementById('score-area').classList.add('on');
+  document.getElementById('check-btn').disabled = true;
+  document.getElementById('score-area').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function resetAll() {
+  checked = false;
+  placed = new Array(8).fill(null);
+  buildPool(shuffle(EVENTS));
+  buildTimeline();
+  updateProgress();
+  document.getElementById('check-btn').disabled = true;
+  document.getElementById('score-area').classList.remove('on');
+}
+
+document.getElementById('check-btn').addEventListener('click', checkAnswers);
+document.getElementById('reset-btn').addEventListener('click', resetAll);
+
+var pool = document.getElementById('card-pool');
+pool.addEventListener('dragover', function(e) { e.preventDefault(); pool.classList.add('drag-over'); });
+pool.addEventListener('dragleave', function() { pool.classList.remove('drag-over'); });
+pool.addEventListener('drop', function(e) {
+  e.preventDefault();
+  pool.classList.remove('drag-over');
+  var id = e.dataTransfer.getData('text/plain') || dragId;
+  var old = placed.indexOf(id);
+  if (old !== -1) {
+    placed[old] = null;
+    refreshSlot(old);
+    returnToPool(id);
+    updateProgress();
+    updateCheck();
+  }
+});
+
+buildPool(shuffle(EVENTS));
+buildTimeline();
+</script>
+</body>
+</html>
